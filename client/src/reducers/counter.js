@@ -1,7 +1,4 @@
-export const INCREMENT_REQUESTED = 'counter/INCREMENT_REQUESTED'
-export const INCREMENT = 'counter/INCREMENT'
-export const DECREMENT_REQUESTED = 'counter/DECREMENT_REQUESTED'
-export const DECREMENT = 'counter/DECREMENT'
+import * as constants from '../constants';
 
 const initialState = {
   count: 0,
@@ -11,26 +8,26 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case INCREMENT_REQUESTED:
+    case constants.INCREMENT_REQUESTED:
       return {
         ...state,
         isIncrementing: true
       }
 
-    case INCREMENT:
+    case constants.INCREMENT:
       return {
         ...state,
         count: state.count + 1,
         isIncrementing: false
       }
 
-    case DECREMENT_REQUESTED:
+    case constants.DECREMENT_REQUESTED:
       return {
         ...state,
         isDecrementing: true
       }
 
-    case DECREMENT:
+    case constants.DECREMENT:
       return {
         ...state,
         count: state.count - 1,
@@ -39,49 +36,5 @@ export default (state = initialState, action) => {
 
     default:
       return state
-  }
-}
-
-export const incrementAsync = () => {
-  return dispatch => {
-    dispatch({
-      type: INCREMENT_REQUESTED
-    })
-
-    return setTimeout(() => {
-      dispatch({
-        type: INCREMENT
-      })
-    }, 1500)
-  }
-}
-
-export const decrementAsync = () => {
-  return dispatch => {
-    dispatch({
-      type: DECREMENT_REQUESTED
-    })
-
-    return setTimeout(() => {
-      dispatch({
-        type: DECREMENT
-      })
-    }, 1500)
-  }
-}
-
-export const increment = () => {
-  return dispatch => {
-    dispatch({
-      type: INCREMENT
-    })
-  }
-}
-
-export const decrement = () => {
-  return dispatch => {
-    dispatch({
-      type: DECREMENT
-    })
   }
 }
