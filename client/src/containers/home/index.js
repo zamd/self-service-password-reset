@@ -1,8 +1,7 @@
 import React from 'react'
 import { push } from 'react-router-redux'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { increment,  incrementAsync,  decrement,  decrementAsync} from '../../actions/counter'
+import * as counterActions from '../../actions/counter'
 import home from './home.css'
 
 const Home = props => (
@@ -30,16 +29,4 @@ const mapStateToProps = state => ({
   isDecrementing: state.counter.isDecrementing
 })
 
-// Todo remove the bindActionCreators
-const mapDispatchToProps = dispatch => bindActionCreators({
-  increment,
-  incrementAsync,
-  decrement,
-  decrementAsync,
-  changePage: () => push('/about-us')
-}, dispatch)
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Home)
+export default connect(mapStateToProps,  {...counterActions, changePage: () => push('/about-us')  })(Home)
