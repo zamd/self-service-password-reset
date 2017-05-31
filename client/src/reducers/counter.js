@@ -2,7 +2,6 @@ import * as constants from '../constants';
 import { fromJS } from 'immutable';
 import createReducer from '../utils/createReducer';
 
-
 const initialState = {
   count: 0,
   isIncrementing: false,
@@ -10,12 +9,10 @@ const initialState = {
 }
 
 export default createReducer(fromJS(initialState), {
-  [constants.INCREMENT_REQUESTED]: (state, action) => {
-    console.log('INCREMENT_REQUESTED');  
-    console.log(state);
-    return state.merge({
+  [constants.INCREMENT_REQUESTED]: (state, action) =>
+    state.merge({
       isIncrementing: true
-    })},
+    }),
   [constants.INCREMENT]: (state, action) =>
     state.merge({
       ...initialState,
