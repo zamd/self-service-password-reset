@@ -1,4 +1,7 @@
 import * as constants from '../constants';
+import { fromJS } from 'immutable';
+import createReducer from '../utils/createReducer';
+
 
 const initialState = {
   count: 0,
@@ -6,35 +9,28 @@ const initialState = {
   isDecrementing: false
 }
 
-export default (state = initialState, action) => {
-  switch (action.type) {
-    case constants.INCREMENT_REQUESTED:
-      return {
-        ...state,
-        isIncrementing: true
-      }
-
-    case constants.INCREMENT:
-      return {
-        ...state,
-        count: state.count + 1,
-        isIncrementing: false
-      }
-
-    case constants.DECREMENT_REQUESTED:
-      return {
-        ...state,
-        isDecrementing: true
-      }
-
-    case constants.DECREMENT:
-      return {
-        ...state,
-        count: state.count - 1,
-        isDecrementing: false
-      }
-
-    default:
-      return state
-  }
-}
+export default createReducer(fromJS(initialState), {
+  [constants.INCREMENT_REQUESTED]: (state, action) => {
+    console.log('INCREMENT_REQUESTED');  
+    console.log(state);
+    return state.merge({
+      isIncrementing: true
+    })},
+  [constants.INCREMENT]: (state, action) =>
+    state.merge({
+      ...initialState,
+      count: state.get('count') + 1,
+      isIncrementing: false
+    }),
+  [constants.DECREMENT_REQUESTED]: (state, action) =>
+    state.merge({
+      ...initialState,
+      isDecrementing: true
+    }),
+  [constants.DECREMENT]: (state, action) =>
+    state.merge({
+      ...initialState,
+      count: state.get('count') - 1,
+      isDecrementing: false
+    })
+});

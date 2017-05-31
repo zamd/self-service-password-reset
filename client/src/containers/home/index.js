@@ -7,16 +7,16 @@ import home from './home.css'
 const Home = props => (
   <div>
     <h1>Home</h1>
-    <p>Count: {props.count}</p>
+    <p>Count: {props.counter.get('count')}</p>
 
     <p>
-      <button className="btn btn-default" onClick={props.increment} disabled={props.isIncrementing}>Increment</button> 
-      <button className="btn btn-default" onClick={props.incrementAsync} disabled={props.isIncrementing}>Increment Async</button>
+      <button className="btn btn-default" onClick={props.increment} disabled={props.counter.get('isIncrementing')}>Increment</button> 
+      <button className="btn btn-default" onClick={props.incrementAsync} disabled={props.counter.get('isIncrementing')}>Increment Async</button>
     </p>
 
     <p>
-      <button className="btn btn-default" onClick={props.decrement} disabled={props.isDecrementing}>Decrementing</button> 
-      <button className="btn btn-default" onClick={props.decrementAsync} disabled={props.isDecrementing}>Decrement Async</button>
+      <button className="btn btn-default" onClick={props.decrement} disabled={props.counter.get('isDecrementing')}>Decrementing</button> 
+      <button className="btn btn-default" onClick={props.decrementAsync} disabled={props.counter.get('isDecrementing')}>Decrement Async</button>
     </p>
 
     <p><a onClick={() => props.changePage()}>Go to about page via redux</a></p>
@@ -24,9 +24,7 @@ const Home = props => (
 )
 
 const mapStateToProps = state => ({
-  count: state.counter.count,
-  isIncrementing: state.counter.isIncrementing,
-  isDecrementing: state.counter.isDecrementing
+  counter: state.counter,
 })
 
 export default connect(mapStateToProps,  {...counterActions, changePage: () => push('/about-us')  })(Home)
