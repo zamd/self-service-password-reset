@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Home from '../Home'
 import About from '../About'
+import NotFound from '../NotFound'
 import Sidebar from '../../components/Sidebar'
 import { Route, Switch } from 'react-router-dom'
 
@@ -17,6 +18,7 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/about-us" component={About} />
+            <Route component={NotFound} />
           </Switch>
         </div>
       </div>
