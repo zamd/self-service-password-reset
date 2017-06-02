@@ -16,7 +16,7 @@ export default function createReducer(initialState, actionHandlers) {
     if (!Map.isMap(state) && !List.isList(state)) {
       throw new TypeError('Reducers must return Immutable objects.');
     }
-    console.log('createReducer');
+
     return state;
   };
 }

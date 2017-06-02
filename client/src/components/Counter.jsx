@@ -14,7 +14,6 @@ export default class Counter extends Component {
 
   render() {
     const { increment, incrementAsync, decrement, decrementAsync, counter } = this.props;
-    console.log(counter);
     return (
       <div>
         <p>Count: {counter.get('count')}</p>

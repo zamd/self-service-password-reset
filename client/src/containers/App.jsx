@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import Sidebar from '../../components/Sidebar'
-import Routes from '../../routes';
-
+import Sidebar from '../components/Sidebar'
+import Routes from '../routes';
 
 import css from './app.css'
 

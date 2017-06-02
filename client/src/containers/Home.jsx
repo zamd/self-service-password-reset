@@ -1,10 +1,10 @@
 import React from 'react'
 import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
-import * as counterActions from '../../actions/counter'
+import * as counterActions from '../actions/counter'
 import home from './home.css'
 
-import Counter from '../../components/Counter'
+import Counter from '../components/Counter'
 
 const Home = props => (
   <section className="react-component-page">
