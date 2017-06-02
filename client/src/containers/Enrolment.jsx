@@ -17,7 +17,7 @@ class Enrolment extends Component {
         <div className="component-information">
           <h1 className="component-title">Enrolment</h1>
           <div className="row">
-            <div className="col-xs-12 col-md-4">
+            <div className="col-xs-12 col-sm-6 col-md-6">
               <NavLink activeClassName="selected" to={`${match.url}/setup`}>
                 <article className="card-docs">
                   <i className="card-docs-icon icon-budicon-106 orange"></i>
@@ -26,7 +26,7 @@ class Enrolment extends Component {
               </NavLink>
             </div>
 
-            <div className="col-xs-12 col-md-4">
+            <div className="col-xs-12 col-sm-6 col-md-6">
               <NavLink activeClassName="selected" to={`${match.url}/management`}>
                 <article className="card-docs">
                   <i className="card-docs-icon icon-budicon-106 orange"></i>

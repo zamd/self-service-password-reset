@@ -14,8 +14,9 @@ class EnrolmentSetup extends Component {
     const emailEnrolmentComponent = () => <EmailEnrolment  {...this.props} />;
     return (
       <div>
+        <hr />
         <div className="row">
-          <div className="col-xs-12 col-md-4">
+          <div className="col-xs-12 col-sm-4 col-md-3">
             <Link to={`${match.url}/setup/sms`}>
               <article className="card-docs">
                 <i className="card-docs-icon icon-budicon-106 orange"></i>
@@ -24,7 +25,7 @@ class EnrolmentSetup extends Component {
             </Link>
           </div>
 
-          <div className="col-xs-12 col-md-4">
+          <div className="col-xs-12 col-sm-4 col-md-3">
             <Link to={`${match.url}/setup/email`}>
               <article className="card-docs">
                 <i className="card-docs-icon icon-budicon-106 orange"></i>
