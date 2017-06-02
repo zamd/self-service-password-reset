@@ -1,16 +1,28 @@
-import React from 'react';
-import { Route, Link } from 'react-router-dom'
+import React, { Component } from 'react';
 import Home from '../Home'
 import About from '../About'
-import Header from '../../components/Header'
+import Sidebar from '../../components/Sidebar'
+import { Route, Switch } from 'react-router-dom'
 
-export default () => (
-  <div>
-    <Header />
+import css from './app.css'
 
-    <div>
-      <Route exact path="/" component={Home} />
-      <Route exact path="/about-us" component={About} />
-    </div>
-  </div>
-)
+class App extends Component {
+
+  render() {
+    return (
+      <div className="auth0-react-styleguide">
+        <Sidebar />
+
+        <div className="styleguide-content">
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/about-us" component={About} />
+          </Switch>
+        </div>
+      </div>
+    )
+  }
+}
+
+
+export default App;

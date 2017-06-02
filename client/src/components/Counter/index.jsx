@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Button } from '@auth0/styleguide-react-components';
 
 export default class Counter extends Component {
 
@@ -19,13 +20,14 @@ export default class Counter extends Component {
         <p>Count: {counter.get('count')}</p>
 
         <p>
-          <button className="btn btn-default" onClick={increment} disabled={counter.get('isIncrementing')}>Increment</button>
-          <button className="btn btn-default" onClick={incrementAsync} disabled={counter.get('isIncrementing')}>Increment Async</button>
+
+          <Button onClick={increment} disabled={counter.get('isIncrementing')}>Increment</Button>
+          <Button bsStyle="info" onClick={incrementAsync} disabled={counter.get('isIncrementing')}>Increment Async</Button>
         </p>
 
         <p>
-          <button className="btn btn-default" onClick={decrement} disabled={counter.get('isDecrementing')}>Decrementing</button>
-          <button className="btn btn-default" onClick={decrementAsync} disabled={counter.get('isDecrementing')}>Decrement Async</button>
+          <Button onClick={decrement} disabled={counter.get('isDecrementing')}>Decrementing</Button>
+          <Button bsStyle="info" onClick={decrementAsync} disabled={counter.get('isDecrementing')}>Decrement Async</Button>
         </p>
       </div>
     );

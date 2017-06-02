@@ -7,13 +7,16 @@ import home from './home.css'
 import Counter from '../../components/Counter'
 
 const Home = props => (
-  <div>
-    <h1>Home</h1>
-    
+  <section className="react-component-page">
+    <div className="component-information">
+      <h1 className="component-title">Home</h1>
+      <p className="component-description">Simple component for onboarding users to sections with no data.</p>
+    </div>
+
     <Counter {...props} />
-    
+
     <p><a onClick={() => props.changePage()}>Go to about page via redux</a></p>
-  </div>
+  </section>
 )
 
 const mapStateToProps = state => ({

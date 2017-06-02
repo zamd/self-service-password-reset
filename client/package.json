@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@auth0/styleguide-react-components": "^1.0.2",
     "immutable": "^3.8.1",
     "react": "^15.5.4",
+    "react-bootstrap": "0.30",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.1",
