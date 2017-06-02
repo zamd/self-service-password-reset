@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import Home from '../Home'
-import About from '../About'
-import NotFound from '../NotFound'
 import Sidebar from '../../components/Sidebar'
-import { Route, Switch } from 'react-router-dom'
+import Routes from '../../routes';
+
 
 import css from './app.css'
 
@@ -15,11 +13,7 @@ class App extends Component {
         <Sidebar />
 
         <div className="styleguide-content">
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/about-us" component={About} />
-            <Route component={NotFound} />
-          </Switch>
+          <Routes />
         </div>
       </div>
     )

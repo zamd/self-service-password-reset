@@ -15,7 +15,7 @@ const Home = props => (
 
     <Counter {...props} />
 
-    <p><a onClick={() => props.changePage()}>Go to about page via redux</a></p>
+    <p><a onClick={() => props.changePage()}>Go to enrolment via redux</a></p>
   </section>
 )
 
@@ -23,4 +23,4 @@ const mapStateToProps = state => ({
   counter: state.counter,
 })
 
-export default connect(mapStateToProps, { ...counterActions, changePage: () => push('/about-us') })(Home)
+export default connect(mapStateToProps, { ...counterActions, changePage: () => push('/enrolment') })(Home)

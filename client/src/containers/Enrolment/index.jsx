@@ -3,8 +3,8 @@ import React from 'react'
 export default () => (
   <section className="react-component-page">
     <div className="component-information">
-      <h1 className="component-title">About us</h1>
-      <p className="component-description">Auth0</p>
+      <h1 className="component-title">Enrolment</h1>
+      <p className="component-description">Todo</p>
     </div>
   </section>
 )

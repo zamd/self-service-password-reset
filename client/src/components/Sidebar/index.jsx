@@ -32,7 +32,9 @@ class Sidebar extends Component {
           icon={464}
           wrapper={<Link to="/" />}
         />
-        <SidebarItem text="About" icon={258} wrapper={<Link to="/about-us" />} />
+        <SidebarItem text="Enrolment" icon={258} wrapper={<Link to="/enrolment" />} />
+        <SidebarItem text="Change Password" icon={258} wrapper={<Link to="/change-password" />} />
+        <SidebarItem text="Reset Password" icon={258} wrapper={<Link to="/reset-password" />} />
         {/*<SidebarItem
           text="React components"
           icon={450}
