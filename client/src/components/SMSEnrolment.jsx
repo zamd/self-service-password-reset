@@ -9,11 +9,12 @@ export default class SMSEnrolment extends Component {
   };
   render() {
     const { enroll, enrolment } = this.props;
+    
     return (
-      <div>
-        <p>
-          <Button disabled={enrolment.get('inProgress')} onClick={enroll}>Enroll SMS</Button>
-        </p>
+      <div className="row" style={ {"margin-top": 25} } >
+        <div className="col-xs-12">
+            <Button disabled={enrolment.get('inProgress')} onClick={enroll}>Enroll SMS</Button>
+        </div>
       </div>
     );
   }

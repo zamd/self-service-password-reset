@@ -10,10 +10,10 @@ export default class EmailEnrolment extends Component {
   render() {
     const { enroll, enrolment } = this.props;
     return (
-      <div>
-        <p>
+      <div className="row" style={{ "margin-top": 25 }} >
+        <div className="col-xs-12">
           <Button disabled={enrolment.get('inProgress')} onClick={enroll}>Enroll Email</Button>
-        </p>
+        </div>
       </div>
     );
   }
