@@ -1,34 +1,32 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@auth0/styleguide-react-components';
 
-export default class Counter extends Component {
+const Counter = ({ increment, incrementAsync, decrement, decrementAsync, counter }) => {
+  return (
+    <div>
+      <p>Count: {counter.get('count')}</p>
 
-  static propTypes = {
-    increment: PropTypes.func.isRequired,
-    incrementAsync: PropTypes.func.isRequired,
-    decrement: PropTypes.func.isRequired,
-    decrementAsync: PropTypes.func.isRequired,
-    counter: PropTypes.object.isRequired
-  };
+      <p>
 
-  render() {
-    const { increment, incrementAsync, decrement, decrementAsync, counter } = this.props;
-    return (
-      <div>
-        <p>Count: {counter.get('count')}</p>
+        <Button onClick={increment} disabled={counter.get('isIncrementing')}>Increment</Button>
+        <Button bsStyle="info" onClick={incrementAsync} disabled={counter.get('isIncrementing')}>Increment Async</Button>
+      </p>
 
-        <p>
+      <p>
+        <Button onClick={decrement} disabled={counter.get('isDecrementing')}>Decrementing</Button>
+        <Button bsStyle="info" onClick={decrementAsync} disabled={counter.get('isDecrementing')}>Decrement Async</Button>
+      </p>
+    </div>
+  )
+};
 
-          <Button onClick={increment} disabled={counter.get('isIncrementing')}>Increment</Button>
-          <Button bsStyle="info" onClick={incrementAsync} disabled={counter.get('isIncrementing')}>Increment Async</Button>
-        </p>
+Counter.propTypes = {
+  increment: PropTypes.func.isRequired,
+  incrementAsync: PropTypes.func.isRequired,
+  decrement: PropTypes.func.isRequired,
+  decrementAsync: PropTypes.func.isRequired,
+  counter: PropTypes.object.isRequired
+};
 
-        <p>
-          <Button onClick={decrement} disabled={counter.get('isDecrementing')}>Decrementing</Button>
-          <Button bsStyle="info" onClick={decrementAsync} disabled={counter.get('isDecrementing')}>Decrement Async</Button>
-        </p>
-      </div>
-    );
-  }
-}
+export default Counter;

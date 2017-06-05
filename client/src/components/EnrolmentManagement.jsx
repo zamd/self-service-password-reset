@@ -1,16 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class EnrolmentManagement extends Component {
-  render() {
-    return (
-      <div>
-        <hr />
-        <p>
-          <h1>Enrolment Management</h1>
-        </p>
-      </div>
-    );
-  }
-}
+const EnrolmentManagement = () => {
+  return (
+    <div>
+      <hr />
+      <p>
+        <h1>Enrolment Management</h1>
+      </p>
+    </div>
+  )
+};
 
 export default EnrolmentManagement;
