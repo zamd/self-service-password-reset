@@ -3,7 +3,7 @@ import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
 import EnrolmentManagement from '../components/EnrolmentManagement';
 import EnrolmentSetup from '../components/EnrolmentSetup';
-import * as enrolmentActions from '../actions/enrolment';
+import {enrolmentActions} from '../actions';
 import { NavLink, Route } from 'react-router-dom';
 
 class Enrolment extends Component {
