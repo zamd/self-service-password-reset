@@ -44,6 +44,6 @@ class Enrolment extends Component {
   }
 }
 
-const mapStateToProps = state => ({ enrolment: state.enrolment })
+const mapStateToProps = state => ({ enrolment: state.enrolment, accessToken: state.auth.get('accessToken') })
 
 export default connect(mapStateToProps, { ...enrolmentActions })(Enrolment)

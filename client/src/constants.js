@@ -4,6 +4,9 @@ export const DECREMENT_REQUESTED = 'counter/DECREMENT_REQUESTED'
 export const DECREMENT = 'counter/DECREMENT'
 
 export const ENROLMENT_REQUESTED = 'enrolment/ENROLMENT_REQUESTED'
+export const ENROLMENT_VERIFICATION_REQUESTED = 'enrolment/ENROLMENT_VERIFICATION_REQUESTED'
+export const ENROLMENT_STARTED = 'enrolment/ENROLMENT_STARTED'
+export const ENROLMENT_FAILED = 'enrolment/ENROLMENT_FAILED'
 export const ENROLLED = 'enrolment/ENROLLED'
 
 export const LOGIN = 'auth/LOGIN'

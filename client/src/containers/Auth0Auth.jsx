@@ -10,10 +10,10 @@ class Auth0Auth extends Component {
   constructor(props) {
     super(props)
     this.auth0 = new auth0.WebAuth({
-      domain: "selfservice-cse.auth0.com",
-      clientID: "feWtQ656G2K43FGeyCsET8O1vhSc75XT",
-      redirectUri: "http://localhost:3000/callback",
-      audience: "https://selfservice-cse.auth0.com/userinfo",
+      domain: process.env.REACT_APP_domain,
+      clientID: process.env.REACT_APP_clientID,
+      redirectUri: process.env.REACT_APP_redirectUri,
+      audience: process.env.REACT_APP_audience,
       responseType: "token id_token",
       scope: "openid"
     });

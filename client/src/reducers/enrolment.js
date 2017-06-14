@@ -19,5 +19,22 @@ export default createReducer(fromJS(initialState), {
     state.merge({
       ...initialState,
       inProgress: true
+    }),
+    [constants.ENROLMENT_VERIFICATION_REQUESTED]: (state, action) =>
+    state.merge({
+      ...initialState,
+      inProgress: true
+    }),
+    [constants.ENROLMENT_STARTED]: (state, action) =>
+    state.merge({
+      ...initialState,
+      inProgress: false,
+      username: action.username
+    }),
+    [constants.ENROLMENT_FAILED]: (state, action) =>
+    state.merge({
+      ...initialState,
+      inProgress: false,
+      error: action.error
     })
 });
