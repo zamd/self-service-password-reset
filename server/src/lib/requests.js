@@ -21,7 +21,7 @@ export const startPasswordlessSMS = (phone_number) => {
     "connection": "sms",
     "phone_number": phone_number,
   })
-
+  console.log('Payload', payload);
   return createRequest(`https://${process.env.DOMAIN}/passwordless/start`, payload);
 }
 
@@ -43,6 +43,7 @@ export const verifyPasswordlessEmail = (otp, email) => {
     "password": otp
   });
 
+  // change to oauth/token
   return createRequest(`https://${process.env.DOMAIN}/oauth/ro`, payload);
 }
 
@@ -54,6 +55,7 @@ export const verifyPasswordlessSMS = (otp, phone_number) => {
     "password": otp
   });
 
+  // change to oauth/token
   return createRequest(`https://${process.env.DOMAIN}/oauth/ro`, payload);
 }
 
