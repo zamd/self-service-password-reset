@@ -9,14 +9,12 @@ import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import jwtExpress from 'express-jwt';
 import jwksRsa from 'jwks-rsa';
+import jwtAuthz from 'express-jwt-authz';
 
-import {
-  startPasswordlessSMS,
-  startPasswordlessEMail,
-  verifyPasswordlessEmail,
-  verifyPasswordlessSMS,
-  linkAccounts
-} from './lib/requests';
+import { startPasswordlessSMS, verifyPasswordlessSMS } from './lib/requests/passwordlessSMS';
+import { startPasswordlessEMail, verifyPasswordlessEmail } from './lib/requests/passwordlessEmail';
+import { linkAccounts } from './lib/requests/linkAccounts';
+import { getEnrollments } from './lib/requests/getEnrollments';
 
 dotenv.config({
   path: __dirname + '/.env'
@@ -52,7 +50,7 @@ app.use(jwtExpress({
   algorithms: ['RS256']
 }));
 
-app.post('/api/enrollment/sms', function (req, res) {
+app.post('/api/enrollment/sms', jwtAuthz(['create:enrolment']), function (req, res) {
 
   const phone_number = req.body.phone_number;
 
@@ -77,7 +75,7 @@ app.post('/api/enrollment/sms', function (req, res) {
     });
 });
 
-app.post('/api/enrollment/email', function (req, res) {
+app.post('/api/enrollment/email', jwtAuthz(['create:enrolment']), function (req, res) {
 
   const email = req.body.email;
 
@@ -96,8 +94,23 @@ app.post('/api/enrollment/email', function (req, res) {
     });
 });
 
+const getUserIds = (req, body) => {
+  const validationOptions = {
+    issuer: `https://${process.env.DOMAIN}/`,
+    audience: process.env.NON_INTERACTIVE_CLIENT_ID
+  }
+  const decoded_id_token = jwt.verify(body.id_token, process.env.NON_INTERACTIVE_CLIENT_SECRET, validationOptions);
 
-app.post('/api/enrollment/verify/email', function (req, res) {
+  const access_token = req.headers.authorization.split(' ')[1];
+  const decoded_access_token = jwt.decode(access_token);
+
+  return {
+    primary_user_id: decoded_access_token.sub,
+    secondary_user_id: decoded_id_token.sub
+  }
+}
+
+app.post('/api/enrollment/verify/email', jwtAuthz(['create:enrolment']), function (req, res) {
   const email = req.body.email;
   const otp = req.body.otp;
 
@@ -109,14 +122,9 @@ app.post('/api/enrollment/verify/email', function (req, res) {
 
   verifyPasswordlessEmail(otp, email)
     .then(body => {
-      // Verify the id_token, currently the token algorithm is HS, we should aim for RS so we can validate it with the public cert.
 
-      const decoded_id_token = jwt.decode(body.id_token);
-      const access_token = req.headers.authorization.split(' ')[1];
-      const decoded_access_token = jwt.decode(access_token);
-
-      // link account
-      linkAccounts(decoded_access_token.sub, decoded_id_token.sub, 'email')
+      var userIds = getUserIds(req, body);
+      linkAccounts(userIds.primary_user_id, userIds.secondary_user_id, 'email')
         .then((data) => {
           res.sendStatus(200);
         })
@@ -130,7 +138,7 @@ app.post('/api/enrollment/verify/email', function (req, res) {
     });
 });
 
-app.post('/api/enrollment/verify/sms', function (req, res) {
+app.post('/api/enrollment/verify/sms', jwtAuthz(['create:enrolment']), function (req, res) {
   const phone_number = req.body.phone_number;
   const otp = req.body.otp;
 
@@ -142,14 +150,9 @@ app.post('/api/enrollment/verify/sms', function (req, res) {
 
   verifyPasswordlessSMS(otp, phone_number)
     .then(body => {
-      // Verify the id_token, currently the token type is HS, we should aim for RS so we can validate it with the public cert.
 
-      const decoded_id_token = jwt.decode(body.id_token);
-      const access_token = req.headers.authorization.split(' ')[1];
-      const decoded_access_token = jwt.decode(access_token);
-
-      // link account
-      linkAccounts(decoded_access_token.sub, decoded_id_token.sub, 'sms')
+      var userIds = getUserIds(req, body);
+      linkAccounts(userIds.primary_user_id, userIds.secondary_user_id, 'sms')
         .then((data) => {
           res.sendStatus(200);
         })
@@ -157,6 +160,19 @@ app.post('/api/enrollment/verify/sms', function (req, res) {
           res.sendStatus(500);
           console.log(err);
         });
+    }).catch(err => {
+      res.sendStatus(500);
+      console.log(err);
+    });
+});
+
+app.get('/api/enrollments', jwtAuthz(['read:enrolment']), function (req, res) {
+  const access_token = req.headers.authorization.split(' ')[1];
+  const decoded_access_token = jwt.decode(access_token);
+
+  getEnrollments(decoded_access_token.sub)
+    .then(enrollments => {
+      res.json(enrollments);
     }).catch(err => {
       res.sendStatus(500);
       console.log(err);
