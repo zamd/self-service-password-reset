@@ -7,7 +7,7 @@ export const login = (auth0) => {
       type: constants.LOGIN_STARTED
     })
 
-    auth0.authorize();
+    auth0.authorize({scope: 'openid read:enrolment create:enrolment update:enrolment reset:password change:password'});
   }
 }
 
