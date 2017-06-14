@@ -17,17 +17,17 @@ const defaultVerifyPasswordlessEmailPayload = {
 
 export const startPasswordlessSMS = (phone_number) => {
   const payload = Object.assign({}, defaultStartPasswordlessPayload, {
-    "client_id": `${process.env.CLIENT_ID}`,
+    "client_id": `${process.env.NON_INTERACTIVE_CLIENT_ID}`,
     "connection": "sms",
     "phone_number": phone_number,
   })
-  console.log('Payload', payload);
+
   return createRequest(`https://${process.env.DOMAIN}/passwordless/start`, payload);
 }
 
 export const startPasswordlessEMail = (email) => {
   const payload = Object.assign({}, defaultStartPasswordlessPayload, {
-    "client_id": `${process.env.CLIENT_ID}`,
+    "client_id": `${process.env.NON_INTERACTIVE_CLIENT_ID}`,
     "connection": "email",
     "email": email,
   });
@@ -37,25 +37,23 @@ export const startPasswordlessEMail = (email) => {
 
 export const verifyPasswordlessEmail = (otp, email) => {
   const payload = Object.assign({}, defaultVerifyPasswordlessEmailPayload, {
-    "client_id": `${process.env.CLIENT_ID}`,
+    "client_id": `${process.env.NON_INTERACTIVE_CLIENT_ID}`,
     "connection": "email",
     "username": email,
     "password": otp
   });
 
-  // change to oauth/token
   return createRequest(`https://${process.env.DOMAIN}/oauth/ro`, payload);
 }
 
 export const verifyPasswordlessSMS = (otp, phone_number) => {
   const payload = Object.assign({}, defaultVerifyPasswordlessEmailPayload, {
-    "client_id": `${process.env.CLIENT_ID}`,
+    "client_id": `${process.env.NON_INTERACTIVE_CLIENT_ID}`,
     "connection": "sms",
     "username": phone_number,
     "password": otp
   });
 
-  // change to oauth/token
   return createRequest(`https://${process.env.DOMAIN}/oauth/ro`, payload);
 }
 
