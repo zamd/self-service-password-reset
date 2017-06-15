@@ -30,6 +30,9 @@
     "build": "babel src -s -D -d dist --presets es2015,stage-0"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.1"
+    "babel-cli": "^6.24.1",
+    "eslint": "^3.19.0",
+    "eslint-config-auth0-base": "^13.0.0",
+    "eslint-plugin-import": "^2.3.0"
   }
 }
