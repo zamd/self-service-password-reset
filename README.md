@@ -19,6 +19,7 @@ NON_INTERACTIVE_CLIENT_ID=51F4c1zBKRK9Vxut2b71qBuyexwa9cmO
 NON_INTERACTIVE_CLIENT_SECRET=XXXXXX
 DOMAIN=selfservice-cse.auth0.com
 AUDIENCE=urn:self-service-portal-api
+VALID_CORS_ORIGINS=http://localhost:3001
 ```
 
 ### Run

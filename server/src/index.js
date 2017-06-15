@@ -23,10 +23,10 @@ dotenv.config({
 
 const app = new Express();
 app.use(helmet());
-app.disable('X-Powered-By'); // Looks like helmet or this line don't remove the X-Powered-By :-(
+app.disable('X-Powered-By'); // Looks like helmet or this line doesn't remove the X-Powered-By :-(
 
 app.use(cors({
-  "origin": process.env.VALID_CORS_ORIGINS.split(' '),
+  "origin": process.env.VALID_CORS_ORIGINS ? process.env.VALID_CORS_ORIGINS.split(' ') : [],
 }));
 // Enable pre-flight for all.
 app.options('*', cors())
