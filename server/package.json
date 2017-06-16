@@ -10,6 +10,7 @@
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
     "cookie-parser": "^1.4.3",
+    "cors": "^2.8.3",
     "crypto": "^0.0.3",
     "dotenv": "^4.0.0",
     "express": "^4.15.3",
@@ -29,6 +30,9 @@
     "build": "babel src -s -D -d dist --presets es2015,stage-0"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.1"
+    "babel-cli": "^6.24.1",
+    "eslint": "^3.19.0",
+    "eslint-config-auth0-base": "^13.0.0",
+    "eslint-plugin-import": "^2.3.0"
   }
 }

@@ -1,33 +1,29 @@
-import gen from '../state-generator';
 import createRequest from './createRequestHelper';
 
-let access_token;
+let accessToken;
 let expiresAt;
 
-export default function getManagementToken() {
-
+export default () => {
   const payload = {
-    "grant_type": "client_credentials",
-    "client_id": process.env.NON_INTERACTIVE_CLIENT_ID,
-    "client_secret": process.env.NON_INTERACTIVE_CLIENT_SECRET,
-    "audience": `https://${process.env.DOMAIN}/api/v2/`
-  }
+    grant_type: 'client_credentials',
+    client_id: process.env.NON_INTERACTIVE_CLIENT_ID,
+    client_secret: process.env.NON_INTERACTIVE_CLIENT_SECRET,
+    audience: `https://${process.env.DOMAIN}/api/v2/`
+  };
 
   return new Promise((resolve, reject) => {
-    
-    if (expiresAt && Date.now() < expiresAt && access_token) {
-      resolve(access_token);
+    if (expiresAt && Date.now() < expiresAt && accessToken) {
+      resolve(accessToken);
     }
 
     createRequest(`https://${process.env.DOMAIN}/oauth/token`, payload)
-      .then(data => {
+      .then((data) => {
         expiresAt = (data.expires_in * 1000) + Date.now();
-        access_token = data.access_token;
-        
-        resolve(access_token);
+        accessToken = data.access_token;
+        resolve(accessToken);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
-      })
+      });
   });
 }
