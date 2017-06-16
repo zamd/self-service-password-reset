@@ -2,42 +2,27 @@ import * as constants from '../constants';
 
 export const enrollEmail = (email, accessToken) => {
   return dispatch => {
-    dispatch({type: constants.ENROLMENT_REQUESTED})
-
-//    fetch(`${process.env.REACT_APP_API}/api/enrolment/email`, {
+    dispatch({type: constants.EMAIL_ENROLMENT_REQUESTED})
     fetch(`/api/enrollment/email`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       },
-        body: JSON.stringify({email: email})
-      })
-      .then(res=>handleEnrolmentResponse(res, email, dispatch))
-      .catch(err=>handleError(err,dispatch))
-  }
-}
-
-export const enrollSMS = (phone, accessToken) => {
-  return dispatch => {
-    dispatch({type: constants.ENROLMENT_REQUESTED})
-
-    fetch(`/api/enrollment/sms`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      },
-        body: JSON.stringify({phone_number: phone})
-      })
-      .then(res=>handleEnrolmentResponse(res, phone, dispatch))
-      .catch(err=>handleError(err,dispatch))
+      body: JSON.stringify({email: email})
+    }).then(res => {
+      if (res.status === 200) 
+        dispatch({type: constants.EMAIL_ENROLMENT_STARTED, email});
+      else 
+        handleEmailEnrolmentError(res, dispatch);
+      }
+    ).catch(err => handleEmailEnrolmentError(err, dispatch))
   }
 }
 
 export const verifyEmail = (email, otp, accessToken) => {
   return dispatch => {
-    dispatch({type: constants.ENROLMENT_VERIFICATION_REQUESTED})
+    dispatch({type: constants.EMAIL_ENROLMENT_VERIFICATION_REQUESTED})
 
     fetch(`/api/enrollment/verify/email`, {
       method: 'POST',
@@ -45,16 +30,41 @@ export const verifyEmail = (email, otp, accessToken) => {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       },
-        body: JSON.stringify({email,otp})
+        body: JSON.stringify({email, otp})
       })
-      .then(res=>handleVerificationResponse(res, dispatch))
-      .catch(err=>handleError(err,dispatch))
+      .then(res => {
+        if (res.status === 200)
+          dispatch(loadEnrolments(accessToken))
+        else handleEmailEnrolmentError(res, dispatch)
+      })
+      .catch(err => handleEmailEnrolmentError(err, dispatch))
   }
 }
 
-export const verifySMS = (phone_number, otp, accessToken) => {
+export const enrollSMS = (phoneNumber, accessToken) => {
   return dispatch => {
-    dispatch({type: constants.ENROLMENT_VERIFICATION_REQUESTED})
+    dispatch({type: constants.SMS_ENROLMENT_REQUESTED})
+
+    fetch(`/api/enrollment/sms`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({phone_number: phoneNumber})
+    }).then(res => {
+      if (res.status === 200) 
+        dispatch({type: constants.SMS_ENROLMENT_STARTED, phoneNumber});
+      else 
+        handleSMSEnrolmentError(res, dispatch);
+      }
+    ).catch(err => handleSMSEnrolmentError(err, dispatch))
+  }
+}
+
+export const verifySMS = (phoneNumber, otp, accessToken) => {
+  return dispatch => {
+    dispatch({type: constants.SMS_ENROLMENT_VERIFICATION_REQUESTED})
 
     fetch(`/api/enrollment/verify/sms`, {
       method: 'POST',
@@ -62,41 +72,58 @@ export const verifySMS = (phone_number, otp, accessToken) => {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       },
-        body: JSON.stringify({phone_number,otp})
+        body: JSON.stringify({phone_number: phoneNumber, otp})
       })
-      .then(res=>handleVerificationResponse(res, dispatch))
-      .catch(err=>handleError(err,dispatch))
+      .then(res => {
+        if (res.status === 200)
+          dispatch(loadEnrolments(accessToken))
+        else handleSMSEnrolmentError(res, dispatch)
+      })
+      .catch(err => handleSMSEnrolmentError(err, dispatch))
   }
 }
 
-
-const handleError = (err, dispatch) => {
-  dispatch({
-    type: constants.ENROLMENT_FAILED,
-    error: err.toString()
-  })
-}
-
-const handleEnrolmentResponse = (res, emailOrPhone, dispatch) => {
-  if (res.status === 200) {
-    dispatch({type: constants.ENROLMENT_STARTED, username: emailOrPhone})
-  } else {
-    res
-      .text()
-      .then(txt => {
-        dispatch({type: constants.ENROLMENT_FAILED, error: `Failed with status code ${res.status}`})
-      })
+export const deleteSMSEnrolment = (phoneNumber, accessToken) => {
+  return dispatch => {
+    dispatch({type: constants.SMS_ENROLMENT_VERIFICATION_REQUESTED})
   }
 }
 
-const handleVerificationResponse = (res, dispatch) => {
-  if (res.status === 200) {
-    dispatch({type: constants.ENROLLED})
-  } else {
-    res
-      .text()
-      .then(txt => {
-        dispatch({type: constants.ENROLMENT_FAILED, error: `Failed with status code ${res.status}`})
-      })
+export const deleteEmailEnrolment = (email, accessToken) => {
+  return dispatch => {
+    dispatch({type: constants.EMAIL_ENROLMENT_VERIFICATION_REQUESTED})
   }
+}
+
+export const loadEnrolments = (accessToken) => {
+  return dispatch => {
+    dispatch({type: constants.ENROLMENTS_FETCHING})
+
+    fetch(`/api/enrollments`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res => {
+        if (res.status===200)
+          return res.json().then(enrolments => dispatch({type: constants.ENROLMENTS_FETCHED, enrolments}));
+        dispatch({type: constants.ENROLMENTS_FETCHING_ERROR, error:`Enrolment fetch failed with status code: ${res.status}`})
+      })
+      .catch(err => dispatch({type: constants.ENROLMENTS_FETCHING_ERROR, error: err.toString()}) )
+  }
+}
+
+function getErrorMessage(errorOrResponse) {
+  const {status} = errorOrResponse;
+  return status
+    ? `Failed with response code: ${status}`
+    : errorOrResponse.toString()
+}
+const handleEmailEnrolmentError = (errorOrres, dispatch) => {
+  dispatch({type: constants.EMAIL_ENROLMENT_FAILED, error: getErrorMessage(errorOrres)})
+}
+
+const handleSMSEnrolmentError = (errorOrres, dispatch) => {
+  dispatch({type: constants.SMS_ENROLMENT_FAILED, error: getErrorMessage(errorOrres)})
 }
