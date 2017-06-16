@@ -27,11 +27,6 @@ class Sidebar extends Component {
           </h1>
         }
       >
-        <SidebarItem
-          text="Home"
-          icon={464}
-          wrapper={<Link to="/" />}
-        />
         <SidebarItem text="Enrolment" icon={257} wrapper={<Link to="/enrolment" />} />
         <SidebarItem text="Change Password" icon={258} wrapper={<Link to="/change-password" />} />
         <SidebarItem text="Reset Password" icon={259} wrapper={<Link to="/reset-password" />} />

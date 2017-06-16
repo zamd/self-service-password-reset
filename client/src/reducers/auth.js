@@ -10,21 +10,22 @@ const initialState = {
 export default createReducer(fromJS(initialState), {
   [constants.LOGIN_STARTED]: (state, action) =>
     state.merge({
-      accessToken: null,
+      ...initialState,
+      accessToken: '',
       inProgress: true
     }),
   [constants.LOGIN_FAILED]: (state, action) =>
     state.merge({
-      accessToken: null,
-      inProgress: false
+      ...initialState
     }),
   [constants.LOGIN_COMPLETED]: (state, action) =>
     state.merge({
-      inProgress: false,
+      ...initialState,
       accessToken: action.accessToken
     }),
   [constants.LOGOUT]: (state, action) =>
     state.merge({
+      ...initialState,
       accessToken: ''
     })
 });

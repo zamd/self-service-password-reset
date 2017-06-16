@@ -1,7 +1,7 @@
 import React from 'react'
 import {Button} from '@auth0/styleguide-react-components'
 
-const Logout = props => (
+const Logout = ({logout}) => (
 
     <section className="react-component-page">
         <div className="component-information">
@@ -9,7 +9,7 @@ const Logout = props => (
             <p className="component-description">
                 Logs out of your Auth0 account</p>
             <br/>
-            <Button bsStyle="danger" onClick={() => props.onLogout()}>Logout</Button>
+            <Button bsStyle="danger" onClick={() => logout()}>Logout</Button>
         </div>
     </section>
 )

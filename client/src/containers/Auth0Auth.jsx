@@ -33,17 +33,16 @@ class Auth0Auth extends Component {
   }
 
   render() {
-    const {login, logout, inProgress, isAuthenticated} = this.props;
+   const {isAuthenticated,login} = this.props;
     return (isAuthenticated
-      ? <Logout onLogout={()=>logout()}/>
-      : <Login onLogin={() => login(this.auth0)}/>)
+      ? <Logout {...this.props}/>
+      : <Login {...{...this.props, login: () => login(this.auth0)}}/>)
   }
 }
 
 const mapStateToProps = state => {
-  const {inProgress, accessToken} = state
-    .auth
-    .toJS();
+  let {inProgress, accessToken} = state.auth.toJS();
+  inProgress = inProgress || state.routing.location.pathname==="/callback";
   return {inProgress, isAuthenticated: accessToken}
 }
 

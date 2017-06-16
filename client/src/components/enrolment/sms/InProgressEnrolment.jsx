@@ -4,9 +4,14 @@ import { Button } from '@auth0/styleguide-react-components';
 
 const InProgressEnrolment = ({smsEnrolment:{inProgressMessage}}) => {  
   return (
-    <div className="row" style={{ "margin-top": 25 }} >
-      <div className="col-xs-3">
-          {inProgressMessage? inProgressMessage : 'Configuring SMS enrolment... '}
+    <div>
+      <div className="row" style={{ "margin-top": 25 }} >
+        <div className="col-xs-3">
+            {inProgressMessage? inProgressMessage : 'Configuring SMS enrolment... '}
+        </div>
+      </div>
+      <div className="row">
+        <Loading show={true}/>
       </div>
     </div>
   );
