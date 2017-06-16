@@ -28,7 +28,7 @@ export default createReducer(fromJS(initialState), {
     const {enrolments} = action;
     const newState = enrolments
       .filter(e => e.provider === 'sms')
-      .map(e => ({phoneNumber: e.phone_number, status: 1}))[0]
+      .map(e => ({phoneNumber: e.phone_number, status: 1, user_id: e.user_id}))[0]
     const mergedState = state.merge({
       ...initialState,
       ...newState

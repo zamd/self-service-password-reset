@@ -27,7 +27,7 @@ export default createReducer(fromJS(initialState), {
     const {enrolments} = action;
     const newState = enrolments
       .filter(e => e.provider === 'email')
-      .map(e => ({email: e.email, status: 1}))[0]
+      .map(e => ({email: e.email, status: 1, user_id: e.user_id}))[0]
     const mergedState = state.merge({
       ...initialState,
       ...newState

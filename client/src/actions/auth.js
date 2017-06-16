@@ -14,7 +14,7 @@ export const login = (auth0) => {
 export const loginSuccess = (authResult) => {
   return dispatch => {
 
-    const {accessToken, expiresIn} = authResult; 
+    const {accessToken, idToken, expiresIn} = authResult; 
     const expiresAt = JSON.stringify((expiresIn * 1000) + new Date().getTime());
     localStorage.setItem('access_token', accessToken);
     localStorage.setItem('expires_at', expiresAt);
