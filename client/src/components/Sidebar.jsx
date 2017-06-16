@@ -3,13 +3,15 @@ import { Sidebar as SidebarRC, SidebarItem, SidebarSubitem } from '@auth0/styleg
 import { Route, Link } from 'react-router-dom'
 
 class Sidebar extends Component {
-
-  state = {
-    mobileNavOpen: false,
-    rCItemOpen: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      mobileNavOpen: false,
+      rCItemOpen: false
+    }
   }
 
-  toggleState = (stateProp) => {
+  toggleState(stateProp) {
     this.setState(prevState => ({ [stateProp]: !prevState[stateProp] }));
   }
 
