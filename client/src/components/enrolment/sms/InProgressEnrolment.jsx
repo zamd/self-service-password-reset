@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@auth0/styleguide-react-components';
+import Loading from '../../Loading';
 
 const InProgressEnrolment = ({smsEnrolment:{inProgressMessage}}) => {  
   return (
