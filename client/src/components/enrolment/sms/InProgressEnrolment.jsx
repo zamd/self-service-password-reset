@@ -3,16 +3,18 @@ import PropTypes from 'prop-types';
 import { Button } from '@auth0/styleguide-react-components';
 import Loading from '../../Loading';
 
-const InProgressEnrolment = ({smsEnrolment:{inProgressMessage}}) => {  
+const InProgressEnrolment = ({ smsEnrolment: { inProgressMessage } }) => {
   return (
     <div>
       <div className="row" style={{ "margin-top": 25 }} >
         <div className="col-xs-3">
-            {inProgressMessage? inProgressMessage : 'Configuring SMS enrolment... '}
+          {inProgressMessage ? inProgressMessage : 'Configuring SMS enrolment... '}
         </div>
       </div>
       <div className="row">
-        <Loading show={true}/>
+        <div className="col-xs-3">
+          <Loading show={true} />
+        </div>
       </div>
     </div>
   );

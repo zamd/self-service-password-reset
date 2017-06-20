@@ -107,6 +107,21 @@ export const deleteSMSEnrolment = (user_id, accessToken) => {
 export const deleteEmailEnrolment = (user_id, accessToken) => {
   return dispatch => {
     dispatch({type: constants.EMAIL_ENROLMENT_DELETING})
+    fetch(`/api/enrollments/email/${user_id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          dispatch({type: constants.SMS_ENROLMENT_DELETED})
+          dispatch(loadEnrolments(accessToken))
+        }
+        else handleSMSEnrolmentError(res, dispatch)
+      })
+      .catch(err => handleSMSEnrolmentError(err, dispatch))
   }
 }
 

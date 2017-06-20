@@ -1,18 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Button} from '@auth0/styleguide-react-components';
+import { Button } from '@auth0/styleguide-react-components';
 import Loading from '../../Loading';
 
-const InProgressEnrolment = ({emailEnrolment: {inProgressMessage}}) => {
+const InProgressEnrolment = ({ emailEnrolment: { inProgressMessage } }) => {
   return (
     <div>
-      <div className="row" style={{"margin-top": 25}}>
+      <div className="row" style={{ "margin-top": 25 }}>
         <div className="col-xs-12">
-          {inProgressMessage ? inProgressMessage: 'Configuring email enrolment...'}
+          {inProgressMessage ? inProgressMessage : 'Configuring email enrolment...'}
         </div>
       </div>
       <div className="row">
-        <Loading show={true}/>
+        <div className="col-xs-3">
+          <Loading show={true} />
+        </div>
       </div>
     </div>
   );
