@@ -4,10 +4,11 @@ import { Button } from '@auth0/styleguide-react-components';
 import {StartEnrolment, InProgressEnrolment, VerifyEnrolment, ManageEnrolment} from './enrolment/sms'
 
 const SMSEnrolment = (props) => {
+  console.log(props);
   const {smsEnrolment} = props;
-  const {phoneNumber, status, inProgress} = smsEnrolment;
-  const enrolmentStarted = !!phoneNumber, 
-        enrolmentCompleted = status===1;
+  const {phoneNumber, isEnrolled, inProgress} = smsEnrolment;
+  const enrolmentStarted = isEnrolled === false && !!phoneNumber, 
+        enrolmentCompleted = isEnrolled;
 
   if (inProgress)
     return <InProgressEnrolment {...props}/>

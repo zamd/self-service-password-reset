@@ -5,7 +5,9 @@ import createReducer from '../../utils/createReducer';
 const initialState = {
   inProgress: false,
   error: "",
-  inProgressMessage: ""
+  inProgressMessage: "",
+  isEnrolled: false,
+  profile: undefined
 }
 
 export default createReducer(fromJS(initialState), {
@@ -27,7 +29,8 @@ export default createReducer(fromJS(initialState), {
     const {enrolments} = action;
     const newState = enrolments
       .filter(e => e.provider === 'email')
-      .map(e => ({email: e.email, status: 1, user_id: e.user_id}))[0]
+      .map(e => ({profile: { email: e.email, status: 1, user_id: e.user_id}, isEnrolled: true}))[0];
+
     const mergedState = state.merge({
       ...initialState,
       ...newState
@@ -45,5 +48,10 @@ export default createReducer(fromJS(initialState), {
   [constants.EMAIL_ENROLMENT_FAILED]: (state, action) => state.merge({
     ...initialState,
     error: action.error
+  }),
+  [constants.SMS_ENROLMENT_DELETED]: (state,action) => state.merge({
+    ...initialState,
+    profile: undefined,
+    isEnrolled: false
   })
 });

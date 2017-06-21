@@ -5,9 +5,9 @@ import {StartEnrolment, InProgressEnrolment, VerifyEnrolment, ManageEnrolment} f
 
 const EmailEnrolment = (props) => { 
   const {emailEnrolment} = props;
-  const {email, status, inProgress} = emailEnrolment;
-  const enrolmentStarted = !!email,
-        enrolmentCompleted = status===1;
+  const {email, isEnrolled, inProgress} = emailEnrolment;
+  const enrolmentStarted = isEnrolled === false && !!email,
+        enrolmentCompleted = isEnrolled;
 
   if (inProgress)
     return <InProgressEnrolment {...props}/>

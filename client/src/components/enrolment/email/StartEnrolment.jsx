@@ -5,7 +5,7 @@ import { Button } from '@auth0/styleguide-react-components';
 const StartEnrolment = ({ enrollEmail, accessToken }) => {
   let email;
   return (
-    <div className="row" style={{ "margin-top": 25 }} >
+    <div className="row" style={{ marginTop: 25 }} >
       <div className="col-xs-3">
         <div className="form-group">
           <label className="control-label" htmlFor="email">Enter email address to enrol</label>

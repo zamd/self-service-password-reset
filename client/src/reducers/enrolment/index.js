@@ -1,8 +1,4 @@
-import { combineReducers } from 'redux'
-import sms from './sms'
-import email from './email';
+import smsEnrolment from './sms'
+import emailEnrolment from './email';
 
-export default combineReducers({
-    smsEnrolment: sms,
-    emailEnrolment: email
-})
+export {smsEnrolment, emailEnrolment}

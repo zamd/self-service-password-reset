@@ -1,26 +1,34 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
-import * as counterActions from '../actions/counter'
+import { enrolmentActions } from '../actions';
 import home from './home.css'
+import { hasEnrolmentScope } from '../utils/helpers'
 
-import Counter from '../components/Counter'
 
-const Home = props => (
-  <section className="react-component-page">
-    <div className="component-information">
-      <h1 className="component-title">Home</h1>
-      <p className="component-description">Simple component for onboarding users to sections with no data.</p>
-    </div>
+import Profile from '../components/profile'
 
-    <Counter {...props} />
+class Home extends Component {
+  componentDidMount() {
+    const { loadEnrolments, accessToken, showEnrolment } = this.props;
+    if(showEnrolment === true){
+      loadEnrolments(accessToken);
+    }
+  }
 
-    <p><a onClick={() => props.changePage()}>Go to enrolment via redux</a></p>
-  </section>
-)
+  render() {
+    return (
+      <Profile {...this.props} />
+    )
+  }
+};
 
 const mapStateToProps = state => ({
-  counter: state.counter,
+  profile: state.auth.toJS().profile,
+  emailEnrolment: state.emailEnrolment.toJS(),
+  smsEnrolment: state.smsEnrolment.toJS(),
+  accessToken: state.auth.toJS().accessToken,
+  showEnrolment: hasEnrolmentScope(state.auth.toJS().scope)
 })
 
-export default connect(mapStateToProps, { ...counterActions, changePage: () => push('/enrolment') })(Home)
+export default connect(mapStateToProps, { ...enrolmentActions, linkToEnrolSms: () => push('enrolment/setup/sms'), linkToEnrolEmail: () => push('enrolment/setup/email') })(Home)

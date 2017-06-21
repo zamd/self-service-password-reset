@@ -6,7 +6,7 @@ const VerifyEnrolment = ({smsEnrolment:{phoneNumber}, verifySMS, accessToken }) 
   let phone, otp;
 
   return (
-    <div className="row" style={{ "margin-top": 25 }} >
+    <div className="row" style={{ marginTop: 25 }} >
       <div className="col-xs-3">
           <div className="form-group">
             <label className="control-label" htmlFor="otp">Enter OTP</label>

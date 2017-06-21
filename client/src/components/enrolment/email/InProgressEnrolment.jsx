@@ -6,7 +6,7 @@ import Loading from '../../Loading';
 const InProgressEnrolment = ({ emailEnrolment: { inProgressMessage } }) => {
   return (
     <div>
-      <div className="row" style={{ "margin-top": 25 }}>
+      <div className="row" style={{ marginTop: 25 }}>
         <div className="col-xs-12">
           {inProgressMessage ? inProgressMessage : 'Configuring email enrolment...'}
         </div>

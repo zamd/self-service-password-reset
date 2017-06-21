@@ -52,8 +52,8 @@ class Enrolment extends Component {
 }
 
 const mapStateToProps = state => ({
-    emailEnrolment: state.enrolment.emailEnrolment.toJS(),
-    smsEnrolment: state.enrolment.smsEnrolment.toJS(),
+    emailEnrolment: state.emailEnrolment.toJS(),
+    smsEnrolment: state.smsEnrolment.toJS(),
     accessToken: state.auth.toJS().accessToken
 })
 

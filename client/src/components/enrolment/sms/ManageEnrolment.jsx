@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@auth0/styleguide-react-components';
 
-const ManageEnrolment = ({smsEnrolment:{phoneNumber,user_id}, deleteSMSEnrolment, accessToken }) => {
+const ManageEnrolment = ({ smsEnrolment: {profile : { phoneNumber, user_id }}, deleteSMSEnrolment, accessToken }) => {
   return (
-    <div className="row" style={{ "margin-top": 25 }} >
+    <div className="row" style={{ marginTop: 25 }} >
       <div className="col-xs-12">
-          <h3>Enrolled as: {phoneNumber}</h3>
+        <h3>Enrolled as: {phoneNumber}</h3>
       </div>
       <div className="col-xs-12">
-          <Button bsStyle="danger" onClick={()=>deleteSMSEnrolment(user_id, accessToken)}>Delete</Button>
+        <Button bsStyle="danger" onClick={() => deleteSMSEnrolment(user_id, accessToken)}>Delete</Button>
       </div>
     </div>
   );
