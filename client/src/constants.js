@@ -27,3 +27,10 @@ export const LOGIN_STARTED = 'auth/LOGIN_STARTED'
 export const LOGIN_COMPLETED = 'auth/LOGIN_COMPLETED'
 export const LOGIN_FAILED = 'auth/LOGIN_FAILED'
 export const LOGOUT = 'auth/LOGOUT'
+
+export const LOG_PASSWORD_ERROR = 'password/LOG_ERROR'
+export const LOG_PASSWORD_INFO = 'password/LOG_INFO'
+export const CLEAR_PASSWORD_ALERT = 'password/CLEAR_ALERT'
+
+export const PASSWORD_CHANGE_REQUESTED = 'password/CHANGE_REQUESTED'
+export const PASSWORD_CHANGE_COMPLETED = 'password/CHANGE_COMPLETED'

@@ -6,6 +6,7 @@
     "@auth0/styleguide-react-components": "^1.0.2",
     "auth0-js": "^8.7.0",
     "immutable": "^3.8.1",
+    "jwt-decode": "^2.2.0",
     "react": "^15.5.4",
     "react-bootstrap": "0.30",
     "react-dom": "^15.5.4",

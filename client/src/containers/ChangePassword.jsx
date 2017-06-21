@@ -1,10 +1,69 @@
 import React from 'react'
+import {connect} from 'react-redux'
+import {Button, Alert} from '@auth0/styleguide-react-components';
+import {passwordActions} from '../actions'
 
-export default () => (
-  <section className="react-component-page">
-    <div className="component-information">
-      <h1 className="component-title">Change password</h1>
-      <p className="component-description">Todo</p>
-    </div>
-  </section>
+const MessageAlert = ({errorMessage, infoMessage, clearAlert}) => (
+  <Alert bsStyle={errorMessage?"danger": "info"} onDismiss={clearAlert}>
+    <p>{errorMessage?errorMessage: infoMessage}</p>
+  </Alert>
 )
+
+const ChangePassword = (props) => {
+  const {changePassword,idToken, errorMessage, infoMessage, inProgress} = props;
+  let oldPassword, newPassword, confirmPassword;
+  return (
+    <section className="react-component-page">
+      <div className="component-information">
+        <h1 className="component-title">Change Password</h1>
+        <p className="component-description">Please enter your current password and choose a new password</p>
+      </div>
+      {errorMessage || infoMessage ?
+      <MessageAlert {...props}/> 
+      : <div/>
+      }
+      <div className="row" style={{
+        "margin-top": 25
+      }}>
+        <div className="col-xs-4">
+          <div className="form-group">
+            <label className="control-label" htmlFor="old_password">Current Password</label>
+            <input
+              type="password"
+              className="form-control"
+              name="old_password"
+              placeholder="password"
+              ref={(input)=>{oldPassword=input}}
+              autoFocus/>
+          </div>
+          <div className="form-group">
+            <label className="control-label" htmlFor="new_password">New Password</label>
+            <input
+              type="password"
+              className="form-control"
+              name="new_password"
+              ref={(input)=>{newPassword=input}}
+              placeholder="new password"/>
+            <input
+              type="password"
+              className="form-control"
+              name="new_password_confirm"
+              ref={(input)=>{confirmPassword=input}}
+              placeholder="confirm password"/>
+          </div>
+
+        </div>
+        <div className="col-xs-12">
+          <Button disabled={inProgress} onClick={()=>changePassword(oldPassword.value,newPassword.value,confirmPassword.value, idToken)}>Change</Button>
+        </div>
+      </div>
+    </section>
+  )
+}
+const mapStateToProps = state => {
+  const {idToken} = state.auth.toJS();
+  const {error, infoMessage, inProgress} = state.password.toJS();
+  return {idToken, errorMessage: error.description, infoMessage, inProgress}
+}
+
+export default connect(mapStateToProps, passwordActions)(ChangePassword)
