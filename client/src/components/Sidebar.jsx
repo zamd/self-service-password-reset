@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Sidebar as SidebarRC, SidebarItem, SidebarSubitem } from '@auth0/styleguide-react-components';
 import { Route, Link } from 'react-router-dom'
+import {connect} from 'react-redux';
+import {hasEnrolmentScope} from '../utils/helpers'
 
 class Sidebar extends Component {
 
@@ -15,6 +17,7 @@ class Sidebar extends Component {
 
   render() {
     const { mobileNavOpen, rCItemOpen } = this.state;
+    const {showEnrolment} = this.props;
     return (
       <SidebarRC
         mobileNavOpen={mobileNavOpen}
@@ -27,7 +30,11 @@ class Sidebar extends Component {
           </h1>
         }
       >
-        <SidebarItem text="Enrolment" icon={257} wrapper={<Link to="/enrolment" />} />
+        { showEnrolment ?
+          <SidebarItem text="Enrolment" icon={257} wrapper={<Link to="/enrolment" />} />
+          :
+          <div/>
+        }
         <SidebarItem text="Change Password" icon={258} wrapper={<Link to="/change-password" />} />
         <SidebarItem text="Reset Password" icon={259} wrapper={<Link to="/reset-password" />} />
         <SidebarItem text="Logout" wrapper={<Link to="/logout" />} />
@@ -45,5 +52,8 @@ class Sidebar extends Component {
     )
   }
 }
-
-export default Sidebar;
+const mapStateToProps = state => {
+  const { scope } = !state.auth.toJS()
+  return { showEnrolment: hasEnrolmentScope(scope) }
+}
+export default connect(mapStateToProps, null)(Sidebar)

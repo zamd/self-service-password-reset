@@ -4,7 +4,9 @@ import createReducer from '../utils/createReducer';
 
 const initialState = {
   inProgress: false, 
-  accessToken: localStorage.getItem('access_token')
+  accessToken: localStorage.getItem('access_token'),
+  idToken: localStorage.getItem('id_token'),
+  scope: localStorage.getItem('scope')
 }
 
 export default createReducer(fromJS(initialState), {
@@ -21,7 +23,7 @@ export default createReducer(fromJS(initialState), {
   [constants.LOGIN_COMPLETED]: (state, action) =>
     state.merge({
       ...initialState,
-      accessToken: action.accessToken
+      ...action.payload
     }),
   [constants.LOGOUT]: (state, action) =>
     state.merge({

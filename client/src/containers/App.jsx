@@ -5,21 +5,16 @@ import Routes from '../routes';
 
 import css from './app.css'
 
-class App extends Component {
+const App = () => (
+  <EnsureLoggedIn>
+    <div className="auth0-react-styleguide">
+      <Sidebar/>
 
-  render() {
-    return (
-      <EnsureLoggedIn>
-        <div className="auth0-react-styleguide">
-          <Sidebar/>
-
-          <div className="styleguide-content">
-            <Routes/>
-          </div>
-        </div>
-      </EnsureLoggedIn>
-    )
-  }
-}
+      <div className="styleguide-content">
+        <Routes/>
+      </div>
+    </div>
+  </EnsureLoggedIn>
+)
 
 export default App;
