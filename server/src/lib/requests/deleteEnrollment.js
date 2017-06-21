@@ -3,7 +3,7 @@ import request from 'superagent';
 import getManagementToken from './getManagementToken';
 
 
-const deleteUser = (accessToken, provider, userId) => {
+const deleteUser = (accessToken, userId, provider) => {
   const url = `https://${process.env.DOMAIN}/api/v2/users/${encodeURIComponent(`${provider}|${userId}`)}`;
   return request('DELETE', url)
     .set('Content-Type', 'application/json')
