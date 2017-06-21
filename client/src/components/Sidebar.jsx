@@ -5,13 +5,15 @@ import {connect} from 'react-redux';
 import {hasEnrolmentScope} from '../utils/helpers'
 
 class Sidebar extends Component {
-
-  state = {
-    mobileNavOpen: false,
-    rCItemOpen: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      mobileNavOpen: false,
+      rCItemOpen: false
+    }
   }
 
-  toggleState = (stateProp) => {
+  toggleState(stateProp) {
     this.setState(prevState => ({ [stateProp]: !prevState[stateProp] }));
   }
 
