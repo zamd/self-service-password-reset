@@ -1,15 +1,15 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
-import counter from './counter'
 import { smsEnrolment, emailEnrolment } from './enrolment/'
 import auth from './auth';
-import password from './password'
+import passwordChange from './passwordChange'
+import passwordReset from './passwordReset'
 
 export default combineReducers({
   routing: routerReducer,
-  counter,
   smsEnrolment,
   emailEnrolment,
-  password,
+  passwordChange,
+  passwordReset,
   auth
 })

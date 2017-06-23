@@ -5,7 +5,7 @@ import jwtDecode from 'jwt-decode';
 export const changePassword = (oldPassword, newPassword, newPasswordConfirm, idToken) => {
   return dispatch => {
     if (newPassword !== newPasswordConfirm) 
-      return dispatch({type: constants.LOG_PASSWORD_ERROR, error: {description: 'New and Confirm password do not match.'}});
+      return dispatch({type: constants.LOG_PASSWORD_CHANGE_ERROR, error: {description: 'New and Confirm password do not match.'}});
 
     dispatch({type: constants.PASSWORD_CHANGE_REQUESTED})
 
@@ -37,17 +37,46 @@ export const changePassword = (oldPassword, newPassword, newPasswordConfirm, idT
   }
 }
 
-export const resetPassword = (username, newPassword) => {
-  return dispatch => {}
+export const resetPassword = (userId, password, passwordConfirm, accessToken) => {
+  return dispatch => {
+    if (password !== passwordConfirm) 
+      return dispatch({type: constants.LOG_PASSWORD_RESET_ERROR, error: {description: 'New and Confirm password do not match.'}});
+      
+      dispatch({type: constants.PASSWORD_RESET_REQUESTED})
+
+      fetch(`/api/password/reset`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      },
+        body: {
+          userId,
+          password
+        }
+      })
+      .then(res => {
+        if (res.status === 200)
+          dispatch({type: constants.PASSWORD_RESET_COMPLETED, message: 'Password reset succesfully. Please use your new password for login'});
+        else handlePasswordResetError(res, dispatch)
+      })
+      .catch(err => handlePasswordResetError(err, dispatch))
+  }
 }
 
-export const clearAlert = (username, newPassword) => {
+export const clearResetAlert = (username, newPassword) => {
   return dispatch => {
-    dispatch({type: constants.CLEAR_PASSWORD_ALERT});
+    dispatch({type: constants.CLEAR_PASSWORD_RESET_ALERT});
 
   }
 }
 
+export const clearChangeAlert = (username, newPassword) => {
+  return dispatch => {
+    dispatch({type: constants.CLEAR_PASSWORD_CHANGE_ALERT});
+
+  }
+}
 
 
 function getErrorMessage(errorOrResponse) {
@@ -68,5 +97,10 @@ function getErrorMessage(errorOrResponse) {
 
 const handlePasswordChangeError = (errorOrResponse, dispatch) => {
   getErrorMessage(errorOrResponse)
-  .then(error=>dispatch({type: constants.LOG_PASSWORD_ERROR, error}))
+  .then(error=>dispatch({type: constants.LOG_PASSWORD_CHANGE_ERROR, error}))
+}
+
+const handlePasswordResetError = (errorOrResponse, dispatch) => {
+  getErrorMessage(errorOrResponse)
+  .then(error=>dispatch({type: constants.LOG_PASSWORD_RESET_ERROR, error}))
 }

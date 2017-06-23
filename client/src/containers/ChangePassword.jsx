@@ -1,16 +1,12 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Button, Alert} from '@auth0/styleguide-react-components';
+import {Button} from '@auth0/styleguide-react-components';
+import MessageAlert from '../components/MessageAlert';
 import {passwordActions} from '../actions'
 
-const MessageAlert = ({errorMessage, infoMessage, clearAlert}) => (
-  <Alert bsStyle={errorMessage?"danger": "info"} onDismiss={clearAlert}>
-    <p>{errorMessage?errorMessage: infoMessage}</p>
-  </Alert>
-)
 
 const ChangePassword = (props) => {
-  const {changePassword,idToken, errorMessage, infoMessage, inProgress} = props;
+  const {changePassword,idToken, errorMessage, infoMessage, inProgress, clearChangeAlert} = props;
   let oldPassword, newPassword, confirmPassword;
   return (
     <section className="react-component-page">
@@ -19,7 +15,7 @@ const ChangePassword = (props) => {
         <p className="component-description">Please enter your current password and choose a new password</p>
       </div>
       {errorMessage || infoMessage ?
-      <MessageAlert {...props}/> 
+      <MessageAlert {...props} clearAlert={clearChangeAlert}/> 
       : <div/>
       }
       <div className="row" style={{
@@ -62,7 +58,7 @@ const ChangePassword = (props) => {
 }
 const mapStateToProps = state => {
   const {idToken} = state.auth.toJS();
-  const {error, infoMessage, inProgress} = state.password.toJS();
+  const {error, infoMessage, inProgress} = state.passwordChange.toJS();
   return {idToken, errorMessage: error.description, infoMessage, inProgress}
 }
 

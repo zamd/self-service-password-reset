@@ -15,7 +15,7 @@ const EnrollmentStatus = ({ smsEnrolment, emailEnrolment, linkToEnrolEmail, link
         : <span>
           {emailEnrolment.isEnrolled
             ? <div>
-              <div>Enrolled with <strong> {`${emailEnrolment.profile.email}`} </strong> <a onClick={() => linkToEnrolSms()}>Edit</a> </div>
+              <div>Enrolled with <strong> {`${emailEnrolment.profile.email}`} </strong> <a onClick={() => linkToEnrolEmail()}>Edit</a> </div>
             </div>
             : <div> <a onClick={() => linkToEnrolEmail()}>Configure</a> enrollment </div>
           }

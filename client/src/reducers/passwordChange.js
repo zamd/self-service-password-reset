@@ -14,12 +14,12 @@ export default createReducer(fromJS(initialState), {
       ...initialState,
       inProgress: true
     }),
-  [constants.LOG_PASSWORD_ERROR]: (state, action) =>
+  [constants.LOG_PASSWORD_CHANGE_ERROR]: (state, action) =>
     state.merge({
       ...initialState,
       error: action.error,
     }),
-  [constants.CLEAR_PASSWORD_ALERT]: (state, action) =>
+  [constants.CLEAR_PASSWORD_CHANGE_ALERT]: (state, action) =>
     state.merge({
       ...initialState
     }),
