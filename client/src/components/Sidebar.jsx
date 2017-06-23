@@ -55,7 +55,7 @@ class Sidebar extends Component {
   }
 }
 const mapStateToProps = state => {
-  const { scope } = !state.auth.toJS()
+  const { scope } = state.auth.toJS()
   return { showEnrolment: hasEnrolmentScope(scope) }
 }
 export default connect(mapStateToProps, null)(Sidebar)
