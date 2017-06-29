@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import nconf from 'nconf';
 import cors from 'cors';
 import jwtExpress from 'express-jwt';
 import jwksRsa from 'jwks-rsa';
@@ -13,6 +14,10 @@ import routes from './routes';
 dotenv.config({
   path: `${__dirname}/.env`
 });
+
+nconf
+  .argv()
+  .env();
 
 const app = new Express();
 app.use(helmet());
@@ -41,16 +46,20 @@ app.use(jwtExpress({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: `https://${process.env.DOMAIN}/.well-known/jwks.json`
+    jwksUri: `https://${nconf.get('DOMAIN')}/.well-known/jwks.json`
   }),
 
   // Validate the audience and the issuer.
-  audience: `${process.env.AUDIENCE}`,
-  issuer: `https://${process.env.DOMAIN}/`,
+  audience: `${nconf.get('AUDIENCE')}`,
+  issuer: `https://${nconf.get('DOMAIN')}/`,
   algorithms: ['RS256']
 }));
 
 app.use('/', routes());
+
+// if (module.parent) return app 
+// else { app.listen }
+
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {

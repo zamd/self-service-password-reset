@@ -1,19 +1,20 @@
 import createRequest from './createRequestHelper';
+import { get as config } from '../utils/config';
 
 export const startPasswordlessEMail = (email) => {
   const payload = {
-    client_id: `${process.env.NON_INTERACTIVE_CLIENT_ID}`,
+    client_id: `${config('NON_INTERACTIVE_CLIENT_ID')}`,
     connection: 'email',
     send: 'code',
     email
   };
 
-  return createRequest(`https://${process.env.DOMAIN}/passwordless/start`, payload);
+  return createRequest(`https://${config('DOMAIN')}/passwordless/start`, payload);
 };
 
 export const verifyPasswordlessEmail = (otp, email) => {
   const payload = {
-    client_id: `${process.env.NON_INTERACTIVE_CLIENT_ID}`,
+    client_id: `${config('NON_INTERACTIVE_CLIENT_ID')}`,
     connection: 'email',
     username: email,
     password: otp,
@@ -21,5 +22,5 @@ export const verifyPasswordlessEmail = (otp, email) => {
     scope: 'openid'
   };
 
-  return createRequest(`https://${process.env.DOMAIN}/oauth/ro`, payload);
+  return createRequest(`https://${config('DOMAIN')}/oauth/ro`, payload);
 };

@@ -20,19 +20,26 @@
     "jsonwebtoken": "^7.4.1",
     "jwks-rsa": "^1.1.1",
     "lodash": "^4.17.4",
+    "lru-memoizer": "^1.11.1",
     "morgan": "^1.8.2",
+    "nconf": "^0.8.4",
     "nodemon": "^1.11.0",
     "superagent": "^3.5.2",
     "winston": "^2.3.1"
   },
   "scripts": {
     "start": "nodemon -w src --exec \"babel-node src --presets es2015,stage-0\"",
-    "build": "babel src -s -D -d dist --presets es2015,stage-0"
+    "build": "babel src -s -D -d dist --presets es2015,stage-0",
+    "test": "jest --verbose"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
-    "eslint": "^3.19.0",
+    "babel-jest": "^20.0.3",
+    "eslint": "^4.0.0",
     "eslint-config-auth0-base": "^13.0.0",
-    "eslint-plugin-import": "^2.3.0"
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-jest": "^20.0.3",
+    "jest": "^20.0.4",
+    "nock": "^9.0.13"
   }
 }

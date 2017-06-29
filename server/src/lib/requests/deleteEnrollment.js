@@ -1,17 +1,18 @@
 import Promise from 'bluebird';
 import request from 'superagent';
 import getManagementToken from './getManagementToken';
+import { get as config } from '../utils/config';
 
 
 const deleteUser = (accessToken, userId, provider) => {
-  const url = `https://${process.env.DOMAIN}/api/v2/users/${encodeURIComponent(`${provider}|${userId}`)}`;
+  const url = `https://${config('DOMAIN')}/api/v2/users/${encodeURIComponent(`${provider}|${userId}`)}`;
   return request('DELETE', url)
     .set('Content-Type', 'application/json')
     .set('Authorization', `Bearer ${accessToken}`);
 };
 
 const unlinkUser = (accessToken, primaryUserId, linkedUserId, provider) => {
-  const url = `https://${process.env.DOMAIN}/api/v2/users/${encodeURIComponent(primaryUserId)}/identities/${provider}/${linkedUserId}`;
+  const url = `https://${config('DOMAIN')}/api/v2/users/${encodeURIComponent(primaryUserId)}/identities/${provider}/${linkedUserId}`;
   return request('DELETE', url)
     .set('Content-Type', 'application/json')
     .set('Authorization', `Bearer ${accessToken}`);

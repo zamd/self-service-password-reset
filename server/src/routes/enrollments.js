@@ -1,6 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import jwtAuthz from 'express-jwt-authz';
+import { get as config } from '../lib/utils/config';
 
 import {
   startPasswordlessSMS,
@@ -16,11 +17,11 @@ import deleteEnrollment from '../lib/requests/deleteEnrollment';
 
 const getUserIds = (req, body) => {
   const validationOptions = {
-    issuer: `https://${process.env.DOMAIN}/`,
-    audience: process.env.NON_INTERACTIVE_CLIENT_ID
+    issuer: `https://${config('DOMAIN')}/`,
+    audience: config('NON_INTERACTIVE_CLIENT_ID')
   };
-  const decodedIdToken = jwt.verify(body.id_token,
-    process.env.NON_INTERACTIVE_CLIENT_SECRET, validationOptions);
+  const clientSecret = config('NON_INTERACTIVE_CLIENT_SECRET');
+  const decodedIdToken = jwt.verify(body.id_token, clientSecret, validationOptions);
 
   const accessToken = req.headers.authorization.split(' ')[1];
   const decodedAccessToken = jwt.decode(accessToken);
@@ -33,6 +34,11 @@ const getUserIds = (req, body) => {
 
 export default () => {
   const api = express.Router();
+
+  // Supertest
+  // import index.js (express app root)
+  // const app = enrollment();
+  // supertest(app).post('url');
 
   api.post('/api/enrollment/sms', jwtAuthz(['create:enrolment']), (req, res) => {
     const phoneNumber = req.body.phone_number;

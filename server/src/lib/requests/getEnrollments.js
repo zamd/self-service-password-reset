@@ -2,11 +2,11 @@ import Promise from 'bluebird';
 import _ from 'lodash';
 import request from 'superagent';
 import getManagementToken from './getManagementToken';
+import { get as config } from '../utils/config';
 
 export default userId => new Promise((resolve, reject) => {
   getManagementToken().then((accessToken) => {
-    const url = `https://${process.env.DOMAIN}/api/v2/users/${encodeURIComponent(userId)}`;
-
+    const url = `https://${config('DOMAIN')}/api/v2/users/${encodeURIComponent(userId)}`;
     request('GET', url)
       .set('Content-Type', 'application/json')
       .set('Authorization', `Bearer ${accessToken}`)
