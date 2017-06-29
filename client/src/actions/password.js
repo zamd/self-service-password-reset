@@ -38,6 +38,8 @@ export const changePassword = (oldPassword, newPassword, newPasswordConfirm, idT
 }
 
 export const resetPassword = (userId, password, passwordConfirm, accessToken) => {
+  console.log('userId', userId);
+  console.log('password', password);
   return dispatch => {
     if (password !== passwordConfirm) 
       return dispatch({type: constants.LOG_PASSWORD_RESET_ERROR, error: {description: 'New and Confirm password do not match.'}});
@@ -50,10 +52,10 @@ export const resetPassword = (userId, password, passwordConfirm, accessToken) =>
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       },
-        body: {
+        body: JSON.stringify({
           userId,
           password
-        }
+        })
       })
       .then(res => {
         if (res.status === 200)

@@ -1,10 +1,10 @@
+/* eslint global-require: 0 */
+
 import nock from 'nock';
 import deleteEnrollment from '../../../src/lib/requests/deleteEnrollment';
 
 jest.mock('../../../src/lib/utils/config');
-jest.mock('../../../src/lib/requests/getManagementToken', () => {
-  return jest.fn(() => Promise.resolve('access_token'));
-});
+jest.mock('../../../src/lib/requests/getManagementToken', () => jest.fn(() => Promise.resolve('access_token')));
 
 describe('DeleteEnrollment', () => {
   beforeEach(() => {

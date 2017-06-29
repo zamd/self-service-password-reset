@@ -1,19 +1,19 @@
 /* eslint global-require: 0 */
 
 import nock from 'nock';
-import linkAccounts from '../../../src/lib/requests/linkAccounts';
+import resetPassword from '../../../src/lib/requests/resetPassword';
 
 jest.mock('../../../src/lib/utils/config');
 jest.mock('../../../src/lib/requests/getManagementToken', () => jest.fn(() => Promise.resolve('access_token')));
 
-describe('LinkAccount', () => {
+describe('ResetPassword', () => {
   beforeEach(() => {
     require('../../../src/lib/utils/config').setMockConfig('test.com', 'client_id', 'client_secret');
   });
 
   test('should handle network errors correctly', (done) => {
     require('../../../src/lib/utils/config').setMockConfig('fake-domain', 'client_id', 'client_secret');
-    linkAccounts()
+    resetPassword()
       .catch((err) => {
         expect(err).toBeDefined();
         expect(err.code).toBeDefined();
@@ -24,10 +24,10 @@ describe('LinkAccount', () => {
 
   test('should handle unauthorized errors correctly', (done) => {
     nock('https://test.com')
-      .post('/api/v2/users/userid/identities')
+      .patch('/api/v2/users/userid')
       .reply(401, 'Unauthorized');
 
-    linkAccounts('userid', 'passwordLessUserId', 'provider')
+    resetPassword('userid', 'passw0rd')
       .catch((err) => {
         expect(err).toBeDefined();
         expect(err.status).toBe(401);
@@ -38,12 +38,12 @@ describe('LinkAccount', () => {
 
   test('should link passwordless user to a regular user', (done) => {
     nock('https://test.com')
-      .post('/api/v2/users/userid/identities')
+      .patch('/api/v2/users/userid')
       .reply(200, {
         payload: 'value'
       });
 
-    linkAccounts('userid', 'passwordLessUserId', 'provider')
+    resetPassword('userid', 'passw0rd')
       .then((body) => {
         expect(body).toBeDefined();
         expect(body.payload).toBe('value');
@@ -54,13 +54,12 @@ describe('LinkAccount', () => {
 
   test('should send correct payload', (done) => {
     nock('https://test.com')
-      .post('/api/v2/users/userid/identities', {
-        provider: 'provider',
-        user_id: 'passwordLessUserId'
+      .patch('/api/v2/users/userid', {
+        password: 'passw0rd'
       })
       .reply(200);
 
-    linkAccounts('userid', 'passwordLessUserId', 'provider')
+    resetPassword('userid', 'passw0rd')
       .then(() => {
         done();
         nock.cleanAll();

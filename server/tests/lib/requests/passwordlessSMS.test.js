@@ -1,3 +1,5 @@
+/* eslint global-require: 0 */
+
 import nock from 'nock';
 import {
   startPasswordlessSMS,
