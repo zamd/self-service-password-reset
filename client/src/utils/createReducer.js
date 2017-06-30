@@ -7,7 +7,6 @@ export default function createReducer(initialState, actionHandlers) {
     }
 
     const handler = actionHandlers[action.type];
-    console.log(action.type);
     if (!handler) {
       return state;
     }
