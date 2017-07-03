@@ -23,10 +23,9 @@ export default () => {
 
     return resetPassword(userId, password)
       .then(() => {
-        res.sendStatus(200);
-      }).catch((err) => {
-        res.sendStatus(500);
-        console.log(err);
+        res.status(200).send();
+      }).catch(() => {
+        res.status(500).send();
       });
   });
 

@@ -4,11 +4,21 @@ import nock from 'nock';
 import linkAccounts from '../../../src/lib/requests/linkAccounts';
 
 jest.mock('../../../src/lib/utils/config');
-jest.mock('../../../src/lib/requests/getManagementToken', () => jest.fn(() => Promise.resolve('access_token')));
+jest.mock('../../../src/lib/requests/getManagementToken', () => jest.fn()
+  .mockReturnValueOnce(Promise.reject(Error()))
+  .mockReturnValue(Promise.resolve('access_token')));
 
 describe('LinkAccount', () => {
   beforeEach(() => {
     require('../../../src/lib/utils/config').setMockConfig('test.com', 'client_id', 'client_secret');
+  });
+
+  test('should handle getManagementToken errors', (done) => {
+    linkAccounts()
+      .catch((err) => {
+        expect(err).toBeDefined();
+        done();
+      });
   });
 
   test('should handle network errors correctly', (done) => {

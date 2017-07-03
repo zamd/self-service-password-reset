@@ -20,6 +20,7 @@ nconf
   .env();
 
 const app = new Express();
+
 app.use(helmet());
 app.disable('X-Powered-By'); // Looks like helmet or this line doesn't remove the X-Powered-By :-(
 
@@ -57,11 +58,11 @@ app.use(jwtExpress({
 
 app.use('/', routes());
 
-// if (module.parent) return app
-// else { app.listen }
-
-
-const port = process.env.PORT || 3001;
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}!`);
-});
+if (module.parent) {
+  module.exports = app;
+} else {
+  const port = process.env.PORT || 3001;
+  app.listen(port, () => {
+    console.log(`Example app listening on port ${port}!`);
+  });
+}

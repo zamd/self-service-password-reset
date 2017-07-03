@@ -4,11 +4,21 @@ import nock from 'nock';
 import resetPassword from '../../../src/lib/requests/resetPassword';
 
 jest.mock('../../../src/lib/utils/config');
-jest.mock('../../../src/lib/requests/getManagementToken', () => jest.fn(() => Promise.resolve('access_token')));
+jest.mock('../../../src/lib/requests/getManagementToken', () => jest.fn()
+  .mockReturnValueOnce(Promise.reject(Error()))
+  .mockReturnValue(Promise.resolve('access_token')));
 
 describe('ResetPassword', () => {
   beforeEach(() => {
     require('../../../src/lib/utils/config').setMockConfig('test.com', 'client_id', 'client_secret');
+  });
+
+  test('should handle getManagementToken errors', (done) => {
+    resetPassword('userid', 'passw0rd')
+      .catch((err) => {
+        expect(err).toBeDefined();
+        done();
+      });
   });
 
   test('should handle network errors correctly', (done) => {

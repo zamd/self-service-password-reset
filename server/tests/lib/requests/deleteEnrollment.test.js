@@ -4,16 +4,26 @@ import nock from 'nock';
 import deleteEnrollment from '../../../src/lib/requests/deleteEnrollment';
 
 jest.mock('../../../src/lib/utils/config');
-jest.mock('../../../src/lib/requests/getManagementToken', () => jest.fn(() => Promise.resolve('access_token')));
+jest.mock('../../../src/lib/requests/getManagementToken', () => jest.fn()
+  .mockReturnValueOnce(Promise.reject(Error()))
+  .mockReturnValue(Promise.resolve('access_token')));
 
 describe('DeleteEnrollment', () => {
   beforeEach(() => {
     require('../../../src/lib/utils/config').setMockConfig('test.com', 'client_id', 'client_secret');
   });
 
+  test('should handle getManagementToken errors', (done) => {
+    deleteEnrollment('primaryuserid', 'linkeduserid', 'provider')
+      .catch((err) => {
+        expect(err).toBeDefined();
+        done();
+      });
+  });
+
   test('should handle network errors correctly', (done) => {
     require('../../../src/lib/utils/config').setMockConfig('fake-domain', 'client_id', 'client_secret');
-    deleteEnrollment('token', 'primaryuserid', 'linkeduserid', 'provider')
+    deleteEnrollment('primaryuserid', 'linkeduserid', 'provider')
       .catch((err) => {
         expect(err).toBeDefined();
         expect(err.code).toBeDefined();
