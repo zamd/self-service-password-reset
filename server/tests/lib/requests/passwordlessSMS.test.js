@@ -2,21 +2,21 @@
 
 import nock from 'nock';
 import {
-  startPasswordlessSMS,
-  verifyPasswordlessSMS
+  startPasswordlessSms,
+  verifyPasswordlessSms
 } from '../../../src/lib/requests/passwordlessSMS';
 
 jest.mock('../../../src/lib/utils/config');
 jest.mock('../../../src/lib/requests/getManagementToken', () => jest.fn(() => Promise.resolve('access_token')));
 
-describe('verifyPasswordlessSMS', () => {
+describe('verifyPasswordlessSms', () => {
   beforeEach(() => {
     require('../../../src/lib/utils/config').setMockConfig('test.com', 'client_id', 'client_secret');
   });
 
   test('should handle network errors correctly', (done) => {
     require('../../../src/lib/utils/config').setMockConfig('fake-domain', 'client_id', 'client_secret');
-    verifyPasswordlessSMS()
+    verifyPasswordlessSms()
       .catch((err) => {
         expect(err).toBeDefined();
         expect(err.code).toBeDefined();
@@ -31,7 +31,7 @@ describe('verifyPasswordlessSMS', () => {
       .post('/oauth/ro')
       .reply(401, 'Unauthorized');
 
-    verifyPasswordlessSMS('000000', '+32484788474')
+    verifyPasswordlessSms('000000', '+32484788474')
       .catch((err) => {
         expect(err).toBeDefined();
         expect(err.status).toBe(401);
@@ -47,7 +47,7 @@ describe('verifyPasswordlessSMS', () => {
         payload: 'value'
       });
 
-    verifyPasswordlessSMS('000000', '+32484788474')
+    verifyPasswordlessSms('000000', '+32484788474')
       .then((body) => {
         expect(body).toBeDefined();
         expect(body.payload).toBe('value');
@@ -68,7 +68,7 @@ describe('verifyPasswordlessSMS', () => {
       })
       .reply(200);
 
-    verifyPasswordlessSMS('000000', '+32484788474')
+    verifyPasswordlessSms('000000', '+32484788474')
       .then(() => {
         done();
         nock.cleanAll();
@@ -83,7 +83,7 @@ describe('startPasswordlessSMS', () => {
 
   test('should handle network errors correctly', (done) => {
     require('../../../src/lib/utils/config').setMockConfig('fake-domain', 'client_id', 'client_secret');
-    startPasswordlessSMS('+32484788474')
+    startPasswordlessSms('+32484788474')
       .catch((err) => {
         expect(err).toBeDefined();
         expect(err.code).toBeDefined();
@@ -97,7 +97,7 @@ describe('startPasswordlessSMS', () => {
       .post('/passwordless/start')
       .reply(401, 'Unauthorized');
 
-    startPasswordlessSMS('+32484788474')
+    startPasswordlessSms('+32484788474')
       .catch((err) => {
         expect(err).toBeDefined();
         expect(err.status).toBe(401);
@@ -113,7 +113,7 @@ describe('startPasswordlessSMS', () => {
         payload: 'value'
       });
 
-    startPasswordlessSMS('+32484788474')
+    startPasswordlessSms('+32484788474')
       .then((body) => {
         expect(body).toBeDefined();
         expect(body.payload).toBe('value');
@@ -132,7 +132,7 @@ describe('startPasswordlessSMS', () => {
       })
       .reply(200);
 
-    startPasswordlessSMS('+32484788474')
+    startPasswordlessSms('+32484788474')
       .then(() => {
         done();
         nock.cleanAll();

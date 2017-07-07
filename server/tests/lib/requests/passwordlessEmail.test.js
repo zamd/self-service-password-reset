@@ -2,7 +2,7 @@
 
 import nock from 'nock';
 import {
-  startPasswordlessEMail,
+  startPasswordlessEmail,
   verifyPasswordlessEmail
 } from '../../../src/lib/requests/passwordlessEmail';
 
@@ -76,14 +76,14 @@ describe('verifyPasswordlessEmail', () => {
   });
 });
 
-describe('startPasswordlessEMail', () => {
+describe('startPasswordlessEmail', () => {
   beforeEach(() => {
     require('../../../src/lib/utils/config').setMockConfig('test.com', 'client_id', 'client_secret');
   });
 
   test('should handle network errors correctly', (done) => {
     require('../../../src/lib/utils/config').setMockConfig('fake-domain', 'client_id', 'client_secret');
-    startPasswordlessEMail('test@auth.com')
+    startPasswordlessEmail('test@auth.com')
       .catch((err) => {
         expect(err).toBeDefined();
         expect(err.code).toBeDefined();
@@ -97,7 +97,7 @@ describe('startPasswordlessEMail', () => {
       .post('/passwordless/start')
       .reply(401, 'Unauthorized');
 
-    startPasswordlessEMail('test@auth.com')
+    startPasswordlessEmail('test@auth.com')
       .catch((err) => {
         expect(err).toBeDefined();
         expect(err.status).toBe(401);
@@ -113,7 +113,7 @@ describe('startPasswordlessEMail', () => {
         payload: 'value'
       });
 
-    startPasswordlessEMail('test@auth.com')
+    startPasswordlessEmail('test@auth.com')
       .then((body) => {
         expect(body).toBeDefined();
         expect(body.payload).toBe('value');
@@ -132,7 +132,7 @@ describe('startPasswordlessEMail', () => {
       })
       .reply(200);
 
-    startPasswordlessEMail('test@auth.com')
+    startPasswordlessEmail('test@auth.com')
       .then(() => {
         done();
         nock.cleanAll();

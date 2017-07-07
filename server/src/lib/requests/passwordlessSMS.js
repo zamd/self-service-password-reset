@@ -1,7 +1,7 @@
 import createRequest from './createRequestHelper';
 import { get as config } from '../utils/config';
 
-export const startPasswordlessSMS = (phoneNumber) => {
+export const startPasswordlessSms = (phoneNumber) => {
   const payload = {
     client_id: `${config('NON_INTERACTIVE_CLIENT_ID')}`,
     connection: 'sms',
@@ -12,7 +12,7 @@ export const startPasswordlessSMS = (phoneNumber) => {
   return createRequest(`https://${config('DOMAIN')}/passwordless/start`, payload);
 };
 
-export const verifyPasswordlessSMS = (otp, phoneNumber) => {
+export const verifyPasswordlessSms = (otp, phoneNumber) => {
   const payload = {
     client_id: `${config('NON_INTERACTIVE_CLIENT_ID')}`,
     connection: 'sms',

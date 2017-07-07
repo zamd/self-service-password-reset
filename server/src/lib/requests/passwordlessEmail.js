@@ -1,7 +1,7 @@
 import createRequest from './createRequestHelper';
 import { get as config } from '../utils/config';
 
-export const startPasswordlessEMail = (email) => {
+export const startPasswordlessEmail = (email) => {
   const payload = {
     client_id: `${config('NON_INTERACTIVE_CLIENT_ID')}`,
     connection: 'email',
