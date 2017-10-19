@@ -1,46 +1,54 @@
 /* eslint global-require: 0 */
 
 import nock from 'nock';
+import { ManagementClient } from 'auth0';
+import { getManagementClient } from '../../../src/lib/utils/auth0';
+
 import linkAccounts from '../../../src/lib/requests/linkAccounts';
 
-jest.mock('../../../src/lib/utils/config');
-jest.mock('../../../src/lib/requests/getManagementToken', () => jest.fn()
-  .mockReturnValueOnce(Promise.reject(Error()))
-  .mockReturnValue(Promise.resolve('access_token')));
+jest.mock('../../../src/lib/utils/auth0', () => ({
+  getManagementClient: jest.fn()
+}));
 
 describe('LinkAccount', () => {
   beforeEach(() => {
-    require('../../../src/lib/utils/config').setMockConfig('test.com', 'client_id', 'client_secret');
-  });
-
-  test('should handle getManagementToken errors', (done) => {
-    linkAccounts()
-      .catch((err) => {
-        expect(err).toBeDefined();
-        done();
-      });
+    getManagementClient.mockImplementation(() => new ManagementClient({
+      domain: 'test.com',
+      clientId: 'client_id',
+      clientSecret: 'client_secret'
+    }));
   });
 
   test('should handle network errors correctly', (done) => {
-    require('../../../src/lib/utils/config').setMockConfig('fake-domain', 'client_id', 'client_secret');
-    linkAccounts()
+    getManagementClient.mockImplementation(() => new ManagementClient({
+      domain: 'fake-domain',
+      clientId: 'client_id',
+      clientSecret: 'client_secret'
+    }));
+
+    linkAccounts('userid')
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.code).toBeDefined();
-        expect(err.code).toBe('ENOTFOUND');
+        expect(err.statusCode).toBeDefined();
+        expect(err.statusCode).toBe('ENOTFOUND');
         done();
       });
   });
 
   test('should handle unauthorized errors correctly', (done) => {
     nock('https://test.com')
+      .post('/oauth/token')
+      .reply(200, {
+        access_token: 'access_token',
+        expires_in: 3600
+      })
       .post('/api/v2/users/userid/identities')
       .reply(401, 'Unauthorized');
 
     linkAccounts('userid', 'passwordLessUserId', 'provider')
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.status).toBe(401);
+        expect(err.statusCode).toBe(401);
         done();
         nock.cleanAll();
       });
@@ -48,6 +56,11 @@ describe('LinkAccount', () => {
 
   test('should link passwordless user to a regular user', (done) => {
     nock('https://test.com')
+      .post('/oauth/token')
+      .reply(200, {
+        access_token: 'access_token',
+        expires_in: 3600
+      })
       .post('/api/v2/users/userid/identities')
       .reply(200, {
         payload: 'value'
@@ -64,6 +77,11 @@ describe('LinkAccount', () => {
 
   test('should send correct payload', (done) => {
     nock('https://test.com')
+      .post('/oauth/token')
+      .reply(200, {
+        access_token: 'access_token',
+        expires_in: 3600
+      })
       .post('/api/v2/users/userid/identities', {
         provider: 'provider',
         user_id: 'passwordLessUserId'

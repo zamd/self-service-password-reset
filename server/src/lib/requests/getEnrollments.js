@@ -1,49 +1,40 @@
-import Promise from 'bluebird';
 import _ from 'lodash';
-import request from 'superagent';
-import getManagementToken from './getManagementToken';
-import { get as config } from '../utils/config';
+import { getManagementClient } from '../utils/auth0';
 
-export default userId => new Promise((resolve, reject) => {
-  getManagementToken().then((accessToken) => {
-    const url = `https://${config('DOMAIN')}/api/v2/users/${encodeURIComponent(userId)}`;
-    request('GET', url)
-      .set('Content-Type', 'application/json')
-      .set('Authorization', `Bearer ${accessToken}`)
-      .end((err, res) => {
-        if (err) {
-          return reject(err);
-        }
+const getEnrollments = (userId) => {
+  const managementClient = getManagementClient();
 
-        const passwordlessIdentities = _.filter(res.body.identities, (identity) => {
-          const filter = (identity.provider === 'sms' || identity.provider === 'email') && typeof identity.profileData !== 'undefined';
-          return filter;
-        });
+  return managementClient.getUser({
+    id: userId
+  }).then((user) => {
+    const passwordlessIdentities = _.filter(user.identities, (identity) => {
+      const filter = (identity.provider === 'sms' || identity.provider === 'email') && typeof identity.profileData !== 'undefined';
+      return filter;
+    });
 
-        const enrollments = _.map(passwordlessIdentities, (identity) => {
-          const enrollement = {
-            user_id: identity.user_id,
-            provider: identity.provider
-          };
-          switch (identity.provider) {
-            case 'sms':
-              enrollement.verified = identity.profileData.phone_verified;
-              enrollement.phone_number = identity.profileData.phone_number;
-              break;
-            case 'email':
-              enrollement.verified = identity.profileData.email_verified;
-              enrollement.email = identity.profileData.email;
-              break;
-            default:
-              reject(new Error('the profileData is missing'));
-          }
+    const enrollments = _.map(passwordlessIdentities, (identity) => {
+      const enrollment = {
+        user_id: identity.user_id,
+        provider: identity.provider
+      };
+      switch (identity.provider) {
+        case 'sms':
+          enrollment.verified = identity.profileData.phone_verified;
+          enrollment.phone_number = identity.profileData.phone_number;
+          break;
+        case 'email':
+          enrollment.verified = identity.profileData.email_verified;
+          enrollment.email = identity.profileData.email;
+          break;
+        default:
+          throw new Error('the profileData is missing'); // will never reach here, because of previous validation.
+      }
 
-          return enrollement;
-        });
+      return enrollment;
+    });
 
-        return resolve(enrollments);
-      });
-  }).catch((err) => {
-    reject(err);
+    return enrollments;
   });
-});
+};
+
+export default getEnrollments;

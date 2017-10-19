@@ -1,32 +1,14 @@
-import Promise from 'bluebird';
-import request from 'superagent';
-import getManagementToken from './getManagementToken';
-import {
-  get as config
-} from '../utils/config';
+import { getManagementClient } from '../utils/auth0';
 
-const resetPassword = (accessToken, userId, password) => {
-  const url = `https://${config('DOMAIN')}/api/v2/users/${encodeURIComponent(userId)}`;
-  const payload = {
+const resetPassword = (userId, password) => {
+  const params = {
+    id: userId
+  };
+  const data = {
     password
   };
-
-  return request('PATCH', url)
-    .send(payload)
-    .set('Content-Type', 'application/json')
-    .set('Authorization', `Bearer ${accessToken}`);
+  const managementClient = getManagementClient();
+  return managementClient.updateUser(params, data);
 };
 
-export default (userId, password) => new Promise((resolve, reject) => {
-  getManagementToken().then((accessToken) => {
-    resetPassword(accessToken, userId, password)
-      .end((err, res) => {
-        if (err) {
-          return reject(err);
-        }
-        return resolve(res.body);
-      });
-  }).catch((err) => {
-    reject(err);
-  });
-});
+export default resetPassword;

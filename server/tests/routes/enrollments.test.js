@@ -1,3 +1,5 @@
+/* eslint global-require: 0 */
+
 import request from 'supertest';
 import nconf from 'nconf';
 import app from '../../src';
@@ -6,6 +8,8 @@ import {
 } from '../mocks/tokens';
 
 jest.mock('express-jwt');
+
+jest.mock('../../src/lib/utils/config');
 
 jest.mock('../../src/lib/requests/getEnrollments', () =>
   jest.fn()
@@ -22,6 +26,10 @@ jest.mock('../../src/lib/requests/deleteEnrollment', () =>
     .mockReturnValueOnce(Promise.reject(Error())));
 
 describe('Get enrollment route', () => {
+  beforeEach(() => {
+    require('../../src/lib/utils/config').setMockConfig('test.com', 'client_id', 'client_secret');
+  });
+
   test('should return status code 401 when no Authorization Header is passed', (done) => {
     request(app)
       .get('/api/enrollments')
@@ -60,6 +68,10 @@ describe('Get enrollment route', () => {
 });
 
 describe('Delete enrollment route', () => {
+  beforeEach(() => {
+    require('../../src/lib/utils/config').setMockConfig('test.com', 'client_id', 'client_secret');
+  });
+
   test('should return status code 401 when no Authorization Header is passed', (done) => {
     request(app)
       .delete('/api/enrollments/sms/user_id')
@@ -95,7 +107,7 @@ describe('Delete enrollment route', () => {
       });
   });
 
-  test('should return status code 400 when invalid provide is passed', (done) => {
+  test('should return status code 400 when invalid provider is passed', (done) => {
     const token = getToken(nconf.get('DOMAIN'), 'delete:enrolment');
     request(app)
       .delete('/api/enrollments/invalid_provider/user_id')
