@@ -9,6 +9,8 @@ import Logout from '../components/Logout'
 class Auth0Auth extends Component {
   constructor(props) {
     super(props)
+
+    console.log('Auth0Auth init');
     this.auth0 = new auth0.WebAuth({
       domain: process.env.REACT_APP_domain,
       clientID: process.env.REACT_APP_clientID,
@@ -19,10 +21,10 @@ class Auth0Auth extends Component {
     });
   }
   componentDidMount() {
-    const {loginFailed, loginSuccess} = this.props;
-    this
-      .auth0
-      .parseHash((err, authResult) => {
+    const {loginFailed, loginSuccess, isAuthenticated} = this.props;
+
+    if(!isAuthenticated){
+      this.auth0.parseHash((err, authResult) => {        
         if (err) {
           return loginFailed(err);
         }
@@ -30,10 +32,11 @@ class Auth0Auth extends Component {
           loginSuccess(authResult);
         }
       });
+    }
   }
 
   render() {
-   const {isAuthenticated,login} = this.props;
+    const {isAuthenticated, login} = this.props;
     return (isAuthenticated
       ? <Logout {...this.props}/>
       : <Login {...{...this.props, login: () => login(this.auth0)}}/>)
