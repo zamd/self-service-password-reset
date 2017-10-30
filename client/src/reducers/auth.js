@@ -6,7 +6,7 @@ const initialState = {
   inProgress: false, 
   accessToken: localStorage.getItem('access_token'),
   idToken: localStorage.getItem('id_token'),
-  scope: localStorage.getItem('scope'),
+  scope: localStorage.getItem('scope') ? JSON.parse(localStorage.getItem('scope')) : undefined,
   profile: localStorage.getItem('profile') ? JSON.parse(localStorage.getItem('profile')) : undefined
 }
 
