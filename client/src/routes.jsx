@@ -16,8 +16,8 @@ export default () => (
 
     <Route path='/login' component={Auth0Auth} />
     <Route path='/logout' component={Auth0Auth} />
+    <Route path='/callback' component={Auth0Auth} />
     
-
     <Route component={NotFound} />
   </Switch>
 )

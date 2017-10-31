@@ -14,7 +14,6 @@ export const login = (auth0) => {
 
 export const loginSuccess = (authResult) => {
   return dispatch => {
-
     const { accessToken, idToken, expiresIn } = authResult; 
     const profile = jwtDecode(idToken);
     
@@ -28,7 +27,7 @@ export const loginSuccess = (authResult) => {
 
     localStorage.setItem('access_token', accessToken);
     localStorage.setItem('id_token', idToken);
-    localStorage.setItem('scope', scope);
+    localStorage.setItem('scope',  JSON.stringify(scope));
     localStorage.setItem('expires_at', expiresAt);
     localStorage.setItem('profile', JSON.stringify(profile));
 
@@ -41,7 +40,7 @@ export const loginSuccess = (authResult) => {
         expiresIn,
         profile
       }
-    })
+    });
     dispatch(push('/'));
   }
 }
