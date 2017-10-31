@@ -1,26 +1,20 @@
-import createRequest from './createRequestHelper';
-import { get as config } from '../utils/config';
+import { getAuthenticationClient } from '../utils/auth0';
 
 export const startPasswordlessSms = (phoneNumber) => {
+  const authenticationClient = getAuthenticationClient();
   const payload = {
-    client_id: `${config('NON_INTERACTIVE_CLIENT_ID')}`,
-    connection: 'sms',
     phone_number: phoneNumber,
     send: 'code'
   };
-
-  return createRequest(`https://${config('DOMAIN')}/passwordless/start`, payload);
+  return authenticationClient.passwordless.sendSMS(payload);
 };
 
 export const verifyPasswordlessSms = (otp, phoneNumber) => {
+  const authenticationClient = getAuthenticationClient();
   const payload = {
-    client_id: `${config('NON_INTERACTIVE_CLIENT_ID')}`,
-    connection: 'sms',
     username: phoneNumber,
     password: otp,
-    grant_type: 'password',
     scope: 'openid'
   };
-
-  return createRequest(`https://${config('DOMAIN')}/oauth/ro`, payload);
+  return authenticationClient.passwordless.signIn(payload);
 };

@@ -1,3 +1,5 @@
+/* eslint global-require: 0 */
+
 import request from 'supertest';
 import nconf from 'nconf';
 import app from '../../src';
@@ -6,6 +8,8 @@ import {
 } from '../mocks/tokens';
 
 jest.mock('express-jwt');
+
+jest.mock('../../src/lib/utils/config');
 
 jest.mock('../../src/lib/requests/extractUserIdsHelper', () => jest.fn(() => {
   return {
@@ -16,8 +20,8 @@ jest.mock('../../src/lib/requests/extractUserIdsHelper', () => jest.fn(() => {
 
 jest.mock('../../src/lib/requests/linkAccounts', () =>
   jest.fn()
-  .mockReturnValueOnce(Promise.resolve())
-  .mockReturnValueOnce(Promise.reject(Error())));
+    .mockReturnValueOnce(Promise.resolve())
+    .mockReturnValueOnce(Promise.reject(Error())));
 
 jest.mock('../../src/lib/requests/passwordlessSMS', () => ({
   startPasswordlessSms: jest.fn()
@@ -29,8 +33,11 @@ jest.mock('../../src/lib/requests/passwordlessSMS', () => ({
     .mockReturnValueOnce(Promise.resolve())
 }));
 
-
 describe('SMS enrollment routes', () => {
+  beforeEach(() => {
+    require('../../src/lib/utils/config').setMockConfig('test.com', 'client_id', 'client_secret');
+  });
+
   test('should return status code 401 when no Authorization Header is passed to start enrollment', (done) => {
     request(app)
       .post('/api/enrollment/sms')

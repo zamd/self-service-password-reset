@@ -1,3 +1,5 @@
+/* eslint global-require: 0 */
+
 import request from 'supertest';
 import nconf from 'nconf';
 import app from '../../src';
@@ -6,12 +8,19 @@ import {
 } from '../mocks/tokens';
 
 jest.mock('express-jwt');
+
+jest.mock('../../src/lib/utils/config');
+
 jest.mock('../../src/lib/requests/resetPassword', () => jest.fn()
   .mockReturnValueOnce(Promise.resolve())
-  .mockReturnValueOnce(Promise.reject())
+  .mockReturnValueOnce(Promise.reject(new Error()))
 );
 
 describe('PasswordReset', () => {
+  beforeEach(() => {
+    require('../../src/lib/utils/config').setMockConfig('test.com', 'client_id', 'client_secret');
+  });
+
   test('should return status code 401 when no Authorization Header is passed', (done) => {
     request(app)
       .post('/api/password/reset')

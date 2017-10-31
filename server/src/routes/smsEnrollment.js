@@ -11,7 +11,7 @@ import getUserIds from '../lib/requests/extractUserIdsHelper';
 export default () => {
   const api = express.Router();
 
-  api.post('/api/enrollment/sms', jwtAuthz(['create:enrolment']), (req, res) => {
+  api.post('/api/enrollment/sms', jwtAuthz(['create:enrolment']), (req, res, next) => {
     const phoneNumber = req.body.phone_number;
 
     if (typeof phoneNumber !== 'string' || phoneNumber.trim().length === 0) {
@@ -27,14 +27,11 @@ export default () => {
     }
 
     return startPasswordlessSms(phoneNumber)
-      .then(() => {
-        res.sendStatus(200);
-      }).catch((err) => {
-        res.sendStatus(500);
-      });
+      .then(() => res.send(200))
+      .catch(err => next(err));
   });
 
-  api.post('/api/enrollment/verify/sms', jwtAuthz(['create:enrolment']), (req, res) => {
+  api.post('/api/enrollment/verify/sms', jwtAuthz(['create:enrolment']), (req, res, next) => {
     const phoneNumber = req.body.phone_number;
     const otp = req.body.otp;
 
@@ -53,16 +50,10 @@ export default () => {
     return verifyPasswordlessSms(otp, phoneNumber)
       .then((body) => {
         const userIds = getUserIds(req, body);
-        linkAccounts(userIds.primary_user_id, userIds.secondary_user_id, 'sms')
-          .then(() => {
-            res.sendStatus(200);
-          })
-          .catch((err) => {
-            res.sendStatus(500);
-          });
-      }).catch((err) => {
-        res.sendStatus(500);
-      });
+        return linkAccounts(userIds.primary_user_id, userIds.secondary_user_id, 'sms');
+      })
+      .then(() => res.send(200))
+      .catch(err => next(err));
   });
   return api;
 };

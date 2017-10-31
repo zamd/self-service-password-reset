@@ -1,26 +1,35 @@
 /* eslint global-require: 0 */
 
 import nock from 'nock';
+import { AuthenticationClient } from 'auth0';
+import { getAuthenticationClient } from '../../../src/lib/utils/auth0';
 import {
   startPasswordlessSms,
   verifyPasswordlessSms
 } from '../../../src/lib/requests/passwordlessSMS';
 
-jest.mock('../../../src/lib/utils/config');
-jest.mock('../../../src/lib/requests/getManagementToken', () => jest.fn(() => Promise.resolve('access_token')));
+jest.mock('../../../src/lib/utils/auth0', () => ({
+  getAuthenticationClient: jest.fn()
+}));
 
 describe('verifyPasswordlessSms', () => {
   beforeEach(() => {
-    require('../../../src/lib/utils/config').setMockConfig('test.com', 'client_id', 'client_secret');
+    getAuthenticationClient.mockImplementation(() => new AuthenticationClient({
+      domain: 'test.com',
+      clientId: 'client_id'
+    }));
   });
 
   test('should handle network errors correctly', (done) => {
-    require('../../../src/lib/utils/config').setMockConfig('fake-domain', 'client_id', 'client_secret');
-    verifyPasswordlessSms()
+    getAuthenticationClient.mockImplementation(() => new AuthenticationClient({
+      domain: 'fake-domain',
+      clientId: 'client_id'
+    }));
+    verifyPasswordlessSms('000000', '+32484788474')
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.code).toBeDefined();
-        expect(err.code).toBe('ENOTFOUND');
+        expect(err.statusCode).toBeDefined();
+        expect(err.statusCode).toBe('ENOTFOUND');
         done();
         nock.cleanAll();
       });
@@ -34,7 +43,7 @@ describe('verifyPasswordlessSms', () => {
     verifyPasswordlessSms('000000', '+32484788474')
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.status).toBe(401);
+        expect(err.statusCode).toBe(401);
         done();
         nock.cleanAll();
       });
@@ -78,16 +87,22 @@ describe('verifyPasswordlessSms', () => {
 
 describe('startPasswordlessSMS', () => {
   beforeEach(() => {
-    require('../../../src/lib/utils/config').setMockConfig('test.com', 'client_id', 'client_secret');
+    getAuthenticationClient.mockImplementation(() => new AuthenticationClient({
+      domain: 'test.com',
+      clientId: 'client_id'
+    }));
   });
 
   test('should handle network errors correctly', (done) => {
-    require('../../../src/lib/utils/config').setMockConfig('fake-domain', 'client_id', 'client_secret');
+    getAuthenticationClient.mockImplementation(() => new AuthenticationClient({
+      domain: 'fake-domain',
+      clientId: 'client_id'
+    }));
     startPasswordlessSms('+32484788474')
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.code).toBeDefined();
-        expect(err.code).toBe('ENOTFOUND');
+        expect(err.statusCode).toBeDefined();
+        expect(err.statusCode).toBe('ENOTFOUND');
         done();
       });
   });
@@ -100,7 +115,7 @@ describe('startPasswordlessSMS', () => {
     startPasswordlessSms('+32484788474')
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.status).toBe(401);
+        expect(err.statusCode).toBe(401);
         done();
         nock.cleanAll();
       });

@@ -1,13 +1,18 @@
 /* eslint global-require: 0 */
 
 import nock from 'nock';
+import { AuthenticationClient } from 'auth0';
+import { getAuthenticationClient } from '../../../src/lib/utils/auth0';
 import {
   startPasswordlessEmail,
   verifyPasswordlessEmail
 } from '../../../src/lib/requests/passwordlessEmail';
 
+jest.mock('../../../src/lib/utils/auth0', () => ({
+  getAuthenticationClient: jest.fn()
+}));
+
 jest.mock('../../../src/lib/utils/config');
-jest.mock('../../../src/lib/requests/getManagementToken', () => jest.fn(() => Promise.resolve('access_token')));
 
 describe('verifyPasswordlessEmail', () => {
   beforeEach(() => {
@@ -16,7 +21,7 @@ describe('verifyPasswordlessEmail', () => {
 
   test('should handle network errors correctly', (done) => {
     require('../../../src/lib/utils/config').setMockConfig('fake-domain', 'client_id', 'client_secret');
-    verifyPasswordlessEmail()
+    verifyPasswordlessEmail('000000', 'test@auth.com')
       .catch((err) => {
         expect(err).toBeDefined();
         expect(err.code).toBeDefined();
@@ -78,16 +83,22 @@ describe('verifyPasswordlessEmail', () => {
 
 describe('startPasswordlessEmail', () => {
   beforeEach(() => {
-    require('../../../src/lib/utils/config').setMockConfig('test.com', 'client_id', 'client_secret');
+    getAuthenticationClient.mockImplementation(() => new AuthenticationClient({
+      domain: 'test.com',
+      clientId: 'client_id'
+    }));
   });
 
   test('should handle network errors correctly', (done) => {
-    require('../../../src/lib/utils/config').setMockConfig('fake-domain', 'client_id', 'client_secret');
+    getAuthenticationClient.mockImplementation(() => new AuthenticationClient({
+      domain: 'fake-domain',
+      clientId: 'client_id'
+    }));
     startPasswordlessEmail('test@auth.com')
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.code).toBeDefined();
-        expect(err.code).toBe('ENOTFOUND');
+        expect(err.statusCode).toBeDefined();
+        expect(err.statusCode).toBe('ENOTFOUND');
         done();
       });
   });
@@ -100,7 +111,7 @@ describe('startPasswordlessEmail', () => {
     startPasswordlessEmail('test@auth.com')
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.status).toBe(401);
+        expect(err.statusCode).toBe(401);
         done();
         nock.cleanAll();
       });

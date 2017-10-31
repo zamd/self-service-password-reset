@@ -1,46 +1,55 @@
 /* eslint global-require: 0 */
 
 import nock from 'nock';
+import { ManagementClient } from 'auth0';
+import { getManagementClient } from '../../../src/lib/utils/auth0';
+
 import resetPassword from '../../../src/lib/requests/resetPassword';
 
-jest.mock('../../../src/lib/utils/config');
-jest.mock('../../../src/lib/requests/getManagementToken', () => jest.fn()
-  .mockReturnValueOnce(Promise.reject(Error()))
-  .mockReturnValue(Promise.resolve('access_token')));
+jest.mock('../../../src/lib/utils/auth0', () => ({
+  getManagementClient: jest.fn()
+}));
 
 describe('ResetPassword', () => {
   beforeEach(() => {
-    require('../../../src/lib/utils/config').setMockConfig('test.com', 'client_id', 'client_secret');
-  });
-
-  test('should handle getManagementToken errors', (done) => {
-    resetPassword('userid', 'passw0rd')
-      .catch((err) => {
-        expect(err).toBeDefined();
-        done();
-      });
+    getManagementClient.mockImplementation(() => new ManagementClient({
+      domain: 'test.com',
+      clientId: 'client_id',
+      clientSecret: 'client_secret'
+    }));
   });
 
   test('should handle network errors correctly', (done) => {
-    require('../../../src/lib/utils/config').setMockConfig('fake-domain', 'client_id', 'client_secret');
+    getManagementClient.mockImplementation(() => new ManagementClient({
+      domain: 'fake-domain',
+      clientId: 'client_id',
+      clientSecret: 'client_secret'
+    }));
+
     resetPassword()
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.code).toBeDefined();
-        expect(err.code).toBe('ENOTFOUND');
+        expect(err.statusCode).toBeDefined();
+        expect(err.statusCode).toBe('ENOTFOUND');
         done();
       });
   });
 
   test('should handle unauthorized errors correctly', (done) => {
     nock('https://test.com')
+      .post('/oauth/token')
+      .reply(200, {
+        access_token: 'access_token',
+        expires_in: 3600
+      })
       .patch('/api/v2/users/userid')
       .reply(401, 'Unauthorized');
 
     resetPassword('userid', 'passw0rd')
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.status).toBe(401);
+        expect(err.statusCode).toBeDefined();
+        expect(err.statusCode).toBe(401);
         done();
         nock.cleanAll();
       });
@@ -48,6 +57,11 @@ describe('ResetPassword', () => {
 
   test('should link passwordless user to a regular user', (done) => {
     nock('https://test.com')
+      .post('/oauth/token')
+      .reply(200, {
+        access_token: 'access_token',
+        expires_in: 3600
+      })
       .patch('/api/v2/users/userid')
       .reply(200, {
         payload: 'value'
@@ -64,6 +78,11 @@ describe('ResetPassword', () => {
 
   test('should send correct payload', (done) => {
     nock('https://test.com')
+      .post('/oauth/token')
+      .reply(200, {
+        access_token: 'access_token',
+        expires_in: 3600
+      })
       .patch('/api/v2/users/userid', {
         password: 'passw0rd'
       })

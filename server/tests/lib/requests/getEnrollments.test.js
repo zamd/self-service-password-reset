@@ -1,23 +1,35 @@
 /* eslint global-require: 0 */
 
 import nock from 'nock';
+import { ManagementClient } from 'auth0';
+import { getManagementClient } from '../../../src/lib/utils/auth0';
+
 import getEnrollments from '../../../src/lib/requests/getEnrollments';
 
-jest.mock('../../../src/lib/utils/config');
-jest.mock('../../../src/lib/requests/getManagementToken', () => jest.fn(() => Promise.resolve('access_token')));
+jest.mock('../../../src/lib/utils/auth0', () => ({
+  getManagementClient: jest.fn()
+}));
 
 describe('GetEnrollments', () => {
   beforeEach(() => {
-    require('../../../src/lib/utils/config').setMockConfig('test.com', 'client_id', 'client_secret');
+    getManagementClient.mockImplementation(() => new ManagementClient({
+      domain: 'test.com',
+      clientId: 'client_id',
+      clientSecret: 'client_secret'
+    }));
   });
 
   test('should handle network errors correctly', (done) => {
-    require('../../../src/lib/utils/config').setMockConfig('fake-domain', 'client_id', 'client_secret');
+    getManagementClient.mockImplementation(() => new ManagementClient({
+      domain: 'fake-domain',
+      clientId: 'client_id',
+      clientSecret: 'client_secret'
+    }));
     getEnrollments('foo-domain', 'userid')
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.code).toBeDefined();
-        expect(err.code).toBe('ENOTFOUND');
+        expect(err.statusCode).toBeDefined();
+        expect(err.statusCode).toBe('ENOTFOUND');
         done();
         nock.cleanAll();
       });
@@ -25,14 +37,19 @@ describe('GetEnrollments', () => {
 
   test('should handle unauthorized errors correctly', (done) => {
     nock('https://test.com')
+      .post('/oauth/token')
+      .reply(200, {
+        access_token: 'access_token',
+        expires_in: 3600
+      })
       .get('/api/v2/users/userid')
       .reply(401, 'Unauthorized');
 
     getEnrollments('userid')
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.status).toBeDefined();
-        expect(err.status).toBe(401);
+        expect(err.statusCode).toBeDefined();
+        expect(err.statusCode).toBe(401);
         done();
         nock.cleanAll();
       });
@@ -40,6 +57,11 @@ describe('GetEnrollments', () => {
 
   test('should only return enrollments for passwordless (sms / email) identities', (done) => {
     nock('https://test.com')
+      .post('/oauth/token')
+      .reply(200, {
+        access_token: 'access_token',
+        expires_in: 3600
+      })
       .get('/api/v2/users/userid')
       .reply(200, {
         identities: [{
@@ -74,6 +96,11 @@ describe('GetEnrollments', () => {
 
   test('should return empty array if user has no passwordless identities', (done) => {
     nock('https://test.com')
+      .post('/oauth/token')
+      .reply(200, {
+        access_token: 'access_token',
+        expires_in: 3600
+      })
       .get('/api/v2/users/userid')
       .reply(200, {
         identities: [{
