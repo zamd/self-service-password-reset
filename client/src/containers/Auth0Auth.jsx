@@ -10,7 +10,6 @@ class Auth0Auth extends Component {
   constructor(props) {
     super(props)
 
-    console.log('Auth0Auth init');
     this.auth0 = new auth0.WebAuth({
       domain: process.env.REACT_APP_domain,
       clientID: process.env.REACT_APP_clientID,

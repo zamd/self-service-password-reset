@@ -11,7 +11,7 @@ export const get = (key) => {
     case 'NON_INTERACTIVE_CLIENT_SECRET':
       return clientSecret;
     default:
-      console.log(`Could not find the setting ${key}`);
+      console.error(`Could not find the setting ${key}`);
       return undefined;
   }
 };
