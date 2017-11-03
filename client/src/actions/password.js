@@ -15,7 +15,7 @@ export const changePassword = (oldPassword, newPassword, newPasswordConfirm, idT
     const payload = {
       connection: claims['https://selfserviceportal/realm'],
       client_id: claims.aud,
-      username: claims.email,
+      username: claims.nickname, // believe this would be username in both cases of ad or passwordless auth?
       old_password: oldPassword,
       new_password: newPassword
     }
