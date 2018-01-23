@@ -16,6 +16,7 @@ export const getManagementClient = () => {
   });
   return managementClient;
 };
+
 export const getAuthenticationClient = () => {
   if (authenticationClient) return authenticationClient;
 

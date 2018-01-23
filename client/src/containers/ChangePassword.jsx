@@ -6,7 +6,7 @@ import {passwordActions} from '../actions'
 
 
 const ChangePassword = (props) => {
-  const {changePassword,idToken, errorMessage, infoMessage, inProgress, clearChangeAlert} = props;
+  const { changePassword, errorMessage, infoMessage, inProgress, clearChangeAlert, accessToken, idToken, userId } = props;
   let oldPassword, newPassword, confirmPassword;
   return (
     <section className="react-component-page">
@@ -50,16 +50,16 @@ const ChangePassword = (props) => {
 
         </div>
         <div className="col-xs-12">
-          <Button disabled={inProgress} onClick={()=>changePassword(oldPassword.value,newPassword.value,confirmPassword.value, idToken)}>Change</Button>
+          <Button disabled={inProgress} onClick={()=>changePassword(oldPassword.value, newPassword.value, confirmPassword.value, accessToken, idToken, userId)}>Change</Button>
         </div>
       </div>
     </section>
   )
 }
 const mapStateToProps = state => {
-  const {idToken} = state.auth.toJS();
-  const {error, infoMessage, inProgress} = state.passwordChange.toJS();
-  return {idToken, errorMessage: error.description, infoMessage, inProgress}
+  const { accessToken, idToken, profile:{sub} } = state.auth.toJS();
+  const { error, infoMessage, inProgress } = state.passwordChange.toJS();
+  return { userId: sub, accessToken, errorMessage: error.description, infoMessage, inProgress, idToken }
 }
 
 export default connect(mapStateToProps, passwordActions)(ChangePassword)

@@ -4,7 +4,6 @@ import { Button } from '@auth0/styleguide-react-components';
 import {StartEnrolment, InProgressEnrolment, VerifyEnrolment, ManageEnrolment} from './enrolment/sms'
 
 const SMSEnrolment = (props) => {
-  console.log(props);
   const {smsEnrolment} = props;
   const {phoneNumber, isEnrolled, inProgress} = smsEnrolment;
   const enrolmentStarted = isEnrolled === false && !!phoneNumber, 
