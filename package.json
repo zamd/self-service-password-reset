@@ -2,6 +2,9 @@
   "name": "self-service-portal-backend",
   "version": "1.0.0",
   "license": "MIT",
+  "engines": {
+    "node": "8.9.1"
+  },
   "dependencies": {
     "auth0": "^2.8.0",
     "babel-core": "^6.24.1",
