@@ -11,7 +11,7 @@ import getUserIds from '../lib/requests/extractUserIdsHelper';
 export default () => {
   const api = express.Router();
 
-  api.post('/api/enrollment/sms', jwtAuthz(['create:enrolment']), (req, res, next) => {
+  api.post('/enrollment/sms', jwtAuthz(['create:enrolment']), (req, res, next) => {
     const phoneNumber = req.body.phone_number;
 
     if (typeof phoneNumber !== 'string' || phoneNumber.trim().length === 0) {
@@ -31,7 +31,7 @@ export default () => {
       .catch(err => next(err));
   });
 
-  api.post('/api/enrollment/verify/sms', jwtAuthz(['create:enrolment']), (req, res, next) => {
+  api.post('/enrollment/verify/sms', jwtAuthz(['create:enrolment']), (req, res, next) => {
     const phoneNumber = req.body.phone_number;
     const otp = req.body.otp;
 

@@ -7,7 +7,7 @@ import deleteEnrollment from '../lib/requests/deleteEnrollment';
 export default () => {
   const api = express.Router();
 
-  api.get('/api/enrollments', jwtAuthz(['read:enrolment']), (req, res, next) => {
+  api.get('/enrollments', jwtAuthz(['read:enrolment']), (req, res, next) => {
     const accessToken = req.headers.authorization.split(' ')[1];
     const decodedAccessToken = jwt.decode(accessToken);
 
@@ -16,7 +16,7 @@ export default () => {
       .catch(err => next(err));
   });
 
-  api.delete('/api/enrollments/:provider/:userId', jwtAuthz(['delete:enrolment']), (req, res, next) => {
+  api.delete('/enrollments/:provider/:userId', jwtAuthz(['delete:enrolment']), (req, res, next) => {
     const userId = req.params.userId;
     const provider = req.params.provider;
 

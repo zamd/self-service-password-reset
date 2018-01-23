@@ -10,6 +10,7 @@ import jwtExpress from 'express-jwt';
 import jwksRsa from 'jwks-rsa';
 import logger from './lib/logger';
 import routes from './routes';
+import path from 'path';
 
 dotenv.config({
   path: `${__dirname}/.env`
@@ -20,6 +21,9 @@ nconf
   .env();
 
 const app = new Express();
+
+// Priority serve any static files.
+app.use(Express.static(path.resolve(__dirname, '../../react-ui/build')));
 
 app.use(helmet());
 app.disable('X-Powered-By'); // Looks like helmet or this line doesn't remove the X-Powered-By :-(
@@ -42,7 +46,7 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
-app.use(jwtExpress({
+app.use("/api",jwtExpress({
   secret: jwksRsa.expressJwtSecret({
     cache: true,
     rateLimit: true,
@@ -56,7 +60,13 @@ app.use(jwtExpress({
   algorithms: ['RS256']
 }));
 
-app.use('/', routes());
+app.use('/api', routes());
+
+// All remaining requests return the React app, so it can handle routing.
+app.get('*', function(req, res) {
+  res.sendFile(path.resolve(__dirname, '../../react-ui/build', 'index.html'));
+});
+
 
 if (module.parent) {
   module.exports = app;

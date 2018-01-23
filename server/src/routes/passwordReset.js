@@ -5,7 +5,7 @@ import resetPassword from '../lib/requests/resetPassword';
 export default () => {
   const api = express.Router();
 
-  api.post('/api/password/reset', jwtAuthz(['reset:password']), (req, res, next) => {
+  api.post('/password/reset', jwtAuthz(['reset:password']), (req, res, next) => {
     const password = req.body.password;
     const userId = req.body.userId;
 
