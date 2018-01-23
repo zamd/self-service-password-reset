@@ -1,8 +1,8 @@
 function (user, context, callback) {
     var _ =require('lodash@4.8.2');
     
-    var requestedScopes = context.request.body.scope ? context.request.body.scope.split(' ') : [];
-    requestedScopes = requestedScopes.concat(context.request.query.scope ? context.request.query.scope.split(' ') : []);
+    var requestedScopes = context.request.body && context.request.body.scope ? context.request.body.scope.split(' ') : [];
+    requestedScopes = context.request.query && requestedScopes.concat(context.request.query.scope ? context.request.query.scope.split(' ') : []);
     
     // Check if connection is SMS or EMAIL, remove requested scopes
     // so only reset and change:password scopes are issued.
