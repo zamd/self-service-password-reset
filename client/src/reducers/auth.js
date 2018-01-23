@@ -19,7 +19,8 @@ export default createReducer(fromJS(initialState), {
     }),
   [constants.LOGIN_FAILED]: (state, action) =>
     state.merge({
-      ...initialState
+      ...initialState,
+      error: action.payload.errorDescription
     }),
   [constants.LOGIN_COMPLETED]: (state, action) =>
     state.merge({

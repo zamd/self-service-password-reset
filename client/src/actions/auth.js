@@ -49,8 +49,9 @@ export const loginFailed = (error) => {
   return dispatch => {
     dispatch({
       type: constants.LOGIN_FAILED,
-      error
-    })
+      payload: error
+    });
+    dispatch(push('/'));
   }
 }
 

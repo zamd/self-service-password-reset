@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Sidebar as SidebarRC, SidebarItem, SidebarSubitem } from '@auth0/styleguide-react-components';
 import { Route, Link } from 'react-router-dom'
 import {connect} from 'react-redux';
-import {hasEnrolmentScope} from '../utils/helpers'
+import { hasChangePasswordScope, hasEnrolmentScope, hasResetPasswordScope } from '../utils/helpers';
 
 class Sidebar extends Component {
   constructor(props) {
@@ -19,7 +19,7 @@ class Sidebar extends Component {
 
   render() {
     const { mobileNavOpen, rCItemOpen } = this.state;
-    const {showEnrolment} = this.props;
+    const {showEnrolment, showChangePassword, showResetPassword} = this.props;
     return (
       <SidebarRC
         mobileNavOpen={mobileNavOpen}
@@ -32,13 +32,9 @@ class Sidebar extends Component {
           </h1>
         }
       >
-        { showEnrolment ?
-          <SidebarItem text="Enrolment" icon={257} wrapper={<Link to="/enrolment" />} />
-          :
-          <div/>
-        }
-        <SidebarItem text="Change Password" icon={258} wrapper={<Link to="/change-password" />} />
-        <SidebarItem text="Reset Password" icon={259} wrapper={<Link to="/reset-password" />} />
+        {showEnrolment && <SidebarItem text="Enrolment" icon={257} wrapper={<Link to="/enrolment" />} />}
+        {showChangePassword && <SidebarItem text="Change Password" icon={258} wrapper={<Link to="/change-password" />} />}
+        {showResetPassword && <SidebarItem text="Reset Password" icon={259} wrapper={<Link to="/reset-password" />} />}
         <SidebarItem text="Logout" wrapper={<Link to="/logout" />} />
         {/*<SidebarItem
           text="React components"
@@ -56,6 +52,6 @@ class Sidebar extends Component {
 }
 const mapStateToProps = state => {
   const { scope } = state.auth.toJS()
-  return { showEnrolment: hasEnrolmentScope(scope) }
+  return { showEnrolment: hasEnrolmentScope(scope), showChangePassword: hasChangePasswordScope(scope), showResetPassword: hasResetPasswordScope(scope) }
 }
 export default connect(mapStateToProps, null)(Sidebar)
