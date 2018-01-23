@@ -32,7 +32,7 @@
   },
   "scripts": {
     "start": "babel-node server/src --presets es2015,stage-0",
-    "start:dev": "nodemon -w server/src --exec \"babel-node src --presets es2015,stage-0\"",
+    "start:dev": "nodemon -w server/src --exec \"babel-node server/src --presets es2015,stage-0\"",
     "build": "babel src -s -D -d dist --presets es2015,stage-0",
     "test": "jest --verbose",
     "test-coverage": "jest --verbose --coverage",
