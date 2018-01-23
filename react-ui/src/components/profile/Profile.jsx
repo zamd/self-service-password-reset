@@ -10,7 +10,7 @@ const Profile = ({ profile, linkToEnrolSms, linkToEnrolEmail, emailEnrolment, sm
       <section className="jumbotron">
         { profile.picture &&  <h2><img src={profile.picture  } alt={profile.email} /></h2>   }
         <h1>Welcome { profile.name || profile.email }</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit quis risus eget urna mollis consectetur adipiscing elit.</p>
+        <p>This Self-service portal allows you to link a secondary/personal identity with your Active Direcory (AD) account. Once you are succesfully enrolled you can login with secondary identity to reset password or unlock your AD account.</p>
       </section>
 
       <section className="react-component-page">

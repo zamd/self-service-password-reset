@@ -32,6 +32,7 @@
     "babel-cli": "^6.24.1"
   },
   "scripts": {
+    "heroku": "git push heroku heroku-hosting:master",
     "start": "babel-node server/src --presets es2015,stage-0",
     "start:dev": "nodemon -w server/src --exec \"babel-node server/src --presets es2015,stage-0\"",
     "build": "babel src -s -D -d dist --presets es2015,stage-0",
