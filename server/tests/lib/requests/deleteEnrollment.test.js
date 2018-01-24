@@ -28,8 +28,9 @@ describe('DeleteEnrollment', () => {
     deleteEnrollment('primaryuserid', 'linkeduserid', 'provider')
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.statusCode).toBeDefined();
-        expect(err.statusCode).toBe('ENOTFOUND');
+        expect(err.statusCode).toBeUndefined();
+        expect(err.name).toBeDefined();
+        expect(err.name).toBe('APIError');
         done();
       });
   });

@@ -30,8 +30,6 @@ describe('ChangePassword', () => {
     changePassword('userid', 'username', 'passw0rd', 'newPassword')
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.code).toBeDefined();
-        expect(err.code).toBe('ENOTFOUND');
         done();
       });
   });
@@ -50,8 +48,9 @@ describe('ChangePassword', () => {
     changePassword('userid', 'username', 'passw0rd', 'newPassword')
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.statusCode).toBeDefined();
-        expect(err.statusCode).toBe('ENOTFOUND');
+        expect(err.statusCode).toBeUndefined();
+        expect(err.name).toBeDefined();
+        expect(err.name).toBe('APIError');
         done();
         nock.cleanAll();
       });
