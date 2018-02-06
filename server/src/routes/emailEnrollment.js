@@ -11,7 +11,7 @@ import getUserIds from '../lib/requests/extractUserIdsHelper';
 export default () => {
   const api = express.Router();
 
-  api.post('/api/enrollment/email', jwtAuthz(['create:enrolment']), (req, res, next) => {
+  api.post('/enrollment/email', jwtAuthz(['create:enrolment']), (req, res, next) => {
     const email = req.body.email;
 
     if (typeof email !== 'string' || email.trim().length === 0) {
@@ -25,7 +25,7 @@ export default () => {
       .catch(err => next(err));
   });
 
-  api.post('/api/enrollment/verify/email', jwtAuthz(['create:enrolment']), (req, res, next) => {
+  api.post('/enrollment/verify/email', jwtAuthz(['create:enrolment']), (req, res, next) => {
     const email = req.body.email;
     const otp = req.body.otp;
 

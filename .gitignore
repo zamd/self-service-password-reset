@@ -55,10 +55,11 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+server/src/.env
 
 # production
 /build
+react-ui/build/
 
 # misc
 .DS_Store
