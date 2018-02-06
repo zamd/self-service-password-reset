@@ -12,7 +12,7 @@ describe('ExtractUserIdsHelper', () => {
     require('../../../src/lib/utils/config').setMockConfig('test.com', 'client_id', 'client_secret');
   });
 
-  test('should handle network errors correctly', () => {
+  test('should extract User Ids', () => {
     const authorizationToken = getHS256Token('client_secret', 'test.com', 'read:enrolment', 'user_1');
     const req = {
       headers: {

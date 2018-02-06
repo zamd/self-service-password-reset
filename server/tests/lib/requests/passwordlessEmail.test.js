@@ -24,8 +24,6 @@ describe('verifyPasswordlessEmail', () => {
     verifyPasswordlessEmail('000000', 'test@auth.com')
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.code).toBeDefined();
-        expect(err.code).toBe('ENOTFOUND');
         done();
         nock.cleanAll();
       });
@@ -97,8 +95,9 @@ describe('startPasswordlessEmail', () => {
     startPasswordlessEmail('test@auth.com')
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.statusCode).toBeDefined();
-        expect(err.statusCode).toBe('ENOTFOUND');
+        expect(err.statusCode).toBeUndefined();
+        expect(err.name).toBeDefined();
+        expect(err.name).toBe('APIError');
         done();
       });
   });
