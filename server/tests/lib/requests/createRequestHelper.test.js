@@ -6,8 +6,6 @@ describe('CreateRequestHandler', () => {
     requestHelper('foo', {})
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.code).toBeDefined();
-        expect(err.code).toBe('ENOTFOUND');
         done();
         nock.cleanAll();
       });

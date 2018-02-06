@@ -28,8 +28,9 @@ describe('verifyPasswordlessSms', () => {
     verifyPasswordlessSms('000000', '+32484788474')
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.statusCode).toBeDefined();
-        expect(err.statusCode).toBe('ENOTFOUND');
+        expect(err.statusCode).toBeUndefined();
+        expect(err.name).toBeDefined();
+        expect(err.name).toBe('APIError');
         done();
         nock.cleanAll();
       });
@@ -101,8 +102,9 @@ describe('startPasswordlessSMS', () => {
     startPasswordlessSms('+32484788474')
       .catch((err) => {
         expect(err).toBeDefined();
-        expect(err.statusCode).toBeDefined();
-        expect(err.statusCode).toBe('ENOTFOUND');
+        expect(err.statusCode).toBeUndefined();
+        expect(err.name).toBeDefined();
+        expect(err.name).toBe('APIError');
         done();
       });
   });
