@@ -51,6 +51,11 @@ export default createReducer(fromJS(initialState), {
     inProgress: false,
     error: action.error
   }),  
+  [constants.SMS_ENROLMENT_DELETING]: (state,action) => state.merge({
+    ...initialState,
+    inProgress: true,
+    inProgressMessage: 'Deleting sms enrolment....'
+  }),
   [constants.SMS_ENROLMENT_DELETED]: (state,action) => state.merge({
     ...initialState,
     profile: undefined,

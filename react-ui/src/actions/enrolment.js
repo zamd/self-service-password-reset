@@ -116,7 +116,7 @@ export const deleteEmailEnrolment = (user_id, accessToken) => {
       })
       .then(res => {
         if (res.status === 200) {
-          dispatch({type: constants.SMS_ENROLMENT_DELETED})
+          dispatch({type: constants.EMAIL_ENROLMENT_DELETED})
           dispatch(loadEnrolments(accessToken))
         }
         else handleSMSEnrolmentError(res, dispatch)

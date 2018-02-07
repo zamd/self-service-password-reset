@@ -23,7 +23,7 @@ export default createReducer(fromJS(initialState), {
   [constants.ENROLMENTS_FETCHING]: (state, action) => state.merge({
     ...initialState,
     inProgress: true,
-    inProgressMessage: 'Fetching email enrolments....'
+    inProgressMessage: 'Fetching enrolments....'
   }),
   [constants.ENROLMENTS_FETCHED]: (state, action) => {
     const {enrolments} = action;
@@ -49,9 +49,15 @@ export default createReducer(fromJS(initialState), {
     ...initialState,
     error: action.error
   }),
-  [constants.SMS_ENROLMENT_DELETED]: (state,action) => state.merge({
+  [constants.EMAIL_ENROLMENT_DELETING]: (state,action) => state.merge({
+    ...initialState,
+    inProgress: true,
+    inProgressMessage: 'Deleting email enrolment....'
+  }),
+  [constants.EMAIL_ENROLMENT_DELETED]: (state,action) => state.merge({
     ...initialState,
     profile: undefined,
-    isEnrolled: false
+    isEnrolled: false,
+    email: undefined
   })
 });
