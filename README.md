@@ -1,7 +1,7 @@
 # Self Service Portal - Password Reset
 
 
-Self service password management is a contractual requirement for SDL. The agreed functionality include:
+Self service password management functionality include:
 
 - Allow Users to change passwords when their Active Directory password has expired
 - Allow Users to change their own Active Directory password
